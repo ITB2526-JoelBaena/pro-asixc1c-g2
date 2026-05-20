@@ -119,3 +119,9 @@ transmetre àudio i vídeo entre els participants. Les seves característiques p
 - Jitsi gestiona la connexió entre tots els participants.
 - No cal cap compte ni registre: s'accedeix directament amb la URL de la sala.
 - URL d'accés: `https://IP_SERVIDOR:8443/InnovateTech`
+
+---
+
+## 2.6 Esquema de xarxa
+
+![Esquema de xarxa InnovateTech](./esquema-xarxa.png)
