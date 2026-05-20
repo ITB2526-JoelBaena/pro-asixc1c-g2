@@ -30,6 +30,9 @@ Font d'àudio (fitxers MP3) → Liquidsoap → Icecast2 → Clients (navegador /
 Liquidsoap llegeix els fitxers d'àudio i envia el flux (stream) al servidor Icecast2 via protocol Shoutcast/Icecast.
 Icecast2 rep el flux i el redistribueix als clients que es connectin.
 Els clients accedeixen mitjançant una URL del tipus http://IP_SERVIDOR:8000/stream.
+
+---
+
 ## 2.3 Servei de vídeo
 
 ### 2.3.1 Descripció del servei
