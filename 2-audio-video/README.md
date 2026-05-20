@@ -124,4 +124,4 @@ transmetre àudio i vídeo entre els participants. Les seves característiques p
 
 ## 2.6 Esquema de xarxa
 
-![Esquema de xarxa InnovateTech](./esquema-xarxa.png)
+![Esquema de xarxa InnovateTech](./capturas/esquema-xarxa.png)
