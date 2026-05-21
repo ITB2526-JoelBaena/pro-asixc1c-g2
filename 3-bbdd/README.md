@@ -16,8 +16,6 @@ S'ha escollit **MySQL 8.0** com a sistema gestor de base de dades per les següe
 
 El diagrama E/R representa les 18 entitats de la base de dades d'InnovateTech, les seves relacions i cardinalitats.
 
-![Diagrama E/R](imatges/diagrama_er.png)
-
 ---
 
 ## 3.3 Model Relacional
