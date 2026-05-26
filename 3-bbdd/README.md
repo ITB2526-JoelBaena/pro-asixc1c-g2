@@ -18,7 +18,7 @@ No s'ha utilitzat RDS d'AWS perquè té un cost elevat. La base de dades s'ha de
 
 El diagrama E/R representa les 18 entitats de la base de dades d'InnovateTech, les seves relacions i cardinalitats. Les entitats s'han agrupat per colors segons la seva funció: blau per al personal, verd per als usuaris i clients, taronja per a les comunicacions, vermell per al comerç, gris per a l'auditoria i morat per als continguts multimèdia.
 
-![Diagrama E/R](imatges/captura_1.png)
+![Diagrama E/R](imatges/diagramaBBDD.png)
 
 ---
 
