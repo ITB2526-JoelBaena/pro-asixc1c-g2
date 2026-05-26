@@ -130,7 +130,7 @@ sudo systemctl status icecast2
 - Panell d'administració: `http://IP_SERVIDOR:8000`
 - Stream d'àudio: `http://IP_SERVIDOR:8000/stream`
 
-![Panell Icecast2 actiu amb stream funcionant](./capturas/capturaXX.png)
+![Panell Icecast2 actiu amb stream funcionant](./capturas/captura10.png)
 
 > **Validació:** Stream d'àudio reproduint-se en temps real, accessible des del navegador i clients VLC.
 
@@ -260,9 +260,9 @@ sudo systemctl status nginx
 - Vídeo sota demanda: `http://IP_SERVIDOR:8080/videos/prova.mp4`
 - Stream HLS: `http://IP_SERVIDOR:8080/hls/stream.m3u8`
 
-![Vídeo prova.mp4 reproduint-se al navegador](./capturas/capturaXX.png)
+![Vídeo prova.mp4 reproduint-se al navegador](./capturas/captura19.png)
 
-![Stream HLS reproduint-se al VLC](./capturas/capturaXX.png)
+![Stream HLS reproduint-se al VLC](./capturas/captura20.png)
 
 > **Validació:** Vídeo accessible des del navegador web i des de VLC mitjançant el protocol HLS.
 
