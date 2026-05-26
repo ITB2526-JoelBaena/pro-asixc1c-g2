@@ -4,97 +4,89 @@
 
 S'ha escollit **MySQL 8.0** com a sistema gestor de base de dades per les següents raons:
 
-- Suport natiu de rols a partir de la versió 8.0, necessari per implementar el control d'accés demanat.
-- `GRANT FILE` funciona de forma nativa, necessari per als backups.
-- Triggers, events i `SELECT INTO OUTFILE` funcionen directament sense configuració addicional.
-- Disponible als repositoris oficials d'Ubuntu 24.04 sense necessitat d'instal·lació manual.
-- Àmplia documentació i comunitat de suport.
+- És la versió disponible per defecte als repositoris oficials d'Ubuntu 24.04, sense necessitat d'instal·lació manual addicional.
+- Suport natiu de rols a partir de la versió 8.0, necessari per implementar el control d'accés demanat per l'enunciat.
+- Triggers, events periòdics i `SELECT INTO OUTFILE` per a backups funcionen directament sense configuració addicional.
+- `GRANT FILE` disponible per permetre operacions d'escriptura de fitxers des del SGBD.
+- Àmplia documentació oficial i comunitat de suport, facilitant la resolució d'incidències.
+
+No s'ha utilitzat RDS d'AWS perquè té un cost elevat. La base de dades s'ha desplegat sobre una instància EC2 amb Ubuntu 24.04.
 
 ---
 
 ## 3.2 Diagrama Entitat-Relació
 
-El diagrama E/R representa les 18 entitats de la base de dades d'InnovateTech, les seves relacions i cardinalitats.
+El diagrama E/R representa les 18 entitats de la base de dades d'InnovateTech, les seves relacions i cardinalitats. Les entitats s'han agrupat per colors segons la seva funció: blau per al personal, verd per als usuaris i clients, taronja per a les comunicacions, vermell per al comerç, gris per a l'auditoria i morat per als continguts multimèdia.
 
-![Diagrama E/R](imatges/diagramaBBDD.png)
+![Diagrama E/R](imatges/captura_1.png)
+
 ---
 
-## 3.3 Model Relacional
+## 3.3 Model Relacional i descripció de les taules
 
-A partir del diagrama E/R s'ha obtingut el següent esquema relacional. Les claus primàries estan **subratllades** i les claus foranes s'indiquen amb una fletxa `→`:
+A partir del diagrama E/R s'ha obtingut el següent esquema relacional. Les claus primàries estan **subratllades** i les claus foranes s'indiquen amb `→`:
 
 **Departaments** (<u>codi_dept</u>, nom, telefon)
+Emmagatzema els departaments de l'empresa. Cada departament té un identificador numèric únic, un nom i un telèfon de contacte. Els departaments definits són: Vendes, Suport Tècnic, Administració, Logística i Direcció.
 
 **Grup_Nivell** (<u>id_grup_nivell</u>, nom, nivell, descripcio)
+Defineix els nivells jeràrquics dins l'empresa, des de *Junior* (nivell 1) fins a *Direcció* (nivell 5). Permet classificar els empleats segons la seva experiència i responsabilitat.
 
 **Empleats** (<u>dni</u>, nom, cognoms, adreca, telefon, codi_dept→Departaments, id_grup_nivell→Grup_Nivell)
+Conté les dades personals i laborals de cada empleat. El DNI és l'identificador principal. Cada empleat pertany a un únic departament i té assignat un rang jeràrquic.
 
 **Clients** (<u>id_client</u>, nom_complet, email, telefon)
+Emmagatzema les dades dels clients externs que utilitzen els serveis o productes d'InnovateTech. Es diferencien dels empleats perquè no pertanyen a l'empresa.
 
 **Grups_Qualitat** (<u>id_grup</u>, nom_grup, qualitat_video, qualitat_audio, bandwidth_max)
+Defineix els nivells de qualitat disponibles per a les comunicacions multimèdia: alta (1080p), mitja (720p) i baixa (480p). S'assigna a cada usuari per establir la qualitat per defecte de les seves videoconferències segons la seva connexió.
 
 **Config_Servidor** (<u>id_config</u>, parametre, valor, protocol, port)
+Guarda els paràmetres de configuració del servidor de videoconferències: màxim de connexions, timeout de trucades, qualitat per defecte i màxim de participants. Permet modificar la configuració sense reiniciar el servei.
 
 **Usuaris** (<u>id_usuari</u>, dni→Empleats, email, extensio, estat, id_grup_qualitat→Grups_Qualitat)
+Representa els empleats que tenen accés al sistema de comunicació intern. Cada usuari té una extensió telefònica única, un estat (actiu/bloquejat) i un grup de qualitat assignat.
 
 **Categories_Video** (<u>id_categoria</u>, nom)
+Classifica els vídeos del catàleg en categories: Formació, Reunions, Presentacions, Tutorials i Comunicats Interns. Evita duplicitats i facilita les cerques.
 
 **Videos** (<u>id_video</u>, titol, descripcio, id_categoria→Categories_Video, duracio, data_publicacio, url_streaming)
+Emmagatzema el catàleg de vídeos disponibles al sistema de streaming, amb l'enllaç directe al servidor per accedir-hi.
 
 **Productes** (<u>id_producte</u>, nom, descripcio, preu, estoc)
+Conté els productes i serveis que InnovateTech ofereix als seus clients: llicències, serveis de suport, servidors virtuals, formació i consultoria.
 
 **Comandes** (<u>id_comanda</u>, id_client→Clients, data_comanda, estat, total)
+Registra les comandes realitzades pels clients. L'estat pot ser: pendent, processada, enviada, completada o cancel·lada.
 
 **Cistell** (<u>id_cistell</u>, id_comanda→Comandes, id_producte→Productes, quantitat, preu_unitari)
+Taula intermèdia que relaciona comandes amb productes, permetent que una comanda contingui múltiples productes amb les seves quantitats i preus.
 
 **Nomines** (<u>id_nomina</u>, dni→Empleats, mes_any, salari_base, complements, deduccions, total_net)
+Gestiona les nòmines mensuals dels empleats. Cada empleat té com a màxim una nòmina per mes, garantit per una clau única composta.
 
 **Trucades** (<u>id_trucada</u>, id_usuari_origen→Usuaris, id_client_desti→Clients*, id_usuari_desti→Usuaris*, data_inici, data_fi, duracio_minuts, id_grup_qualitat→Grups_Qualitat, valoracio, comentari)
+Registra totes les trucades i videoconferències. El destí pot ser un client extern o un usuari intern, però mai els dos alhora (constraint CHECK). Inclou la qualitat usada i la valoració opcional de l'usuari.
 
 **Mesures_Bandwidth** (<u>id_mesura</u>, data_hora, id_usuari_operari→Usuaris, equip_mesurat, velocitat_baixada, velocitat_pujada, latencia, resultat, notes)
+Emmagatzema les mesures d'ample de banda realitzades pels operaris. El resultat es classifica automàticament com a acceptable o no acceptable.
 
 **Quotes_Usuari** (<u>id_quota</u>, id_usuari→Usuaris, mes_any, minuts_consumits, trucades_avui, limit_minuts_mes, limit_trucades_dia)
+Controla el consum de trucades de cada usuari per mes. Cada usuari té límits personalitzats segons el seu rol i departament.
 
 **Avisos** (<u>id_avis</u>, usuari_db, taula_afectada, operacio, data_hora, descripcio)
+Taula d'auditoria que registra tots els intents d'accés no autoritzat. Utilitza motor **MyISAM** en lloc d'InnoDB per evitar que els registres es perdin quan un trigger llança un error i MySQL fa rollback.
 
 **Backup_Log** (<u>id_backup</u>, data_hora, taules_incloses, resultat)
-
-> *Els camps marcats amb `*` són nullables, ja que una trucada pot tenir com a destí un client extern o un usuari intern, però no els dos alhora.
+Registra cada execució del backup automàtic: quan s'ha executat, quines taules s'han inclòs i si ha tingut èxit.
 
 ---
 
 ## 3.4 Creació de les taules i inserció de dades
 
-Les taules s'han creat seguint l'ordre correcte per respectar les dependències entre claus foranes. S'han definit les restriccions adequades: `PRIMARY KEY`, `FOREIGN KEY`, `NOT NULL`, `UNIQUE` i `CHECK`.
+Les taules s'han creat seguint l'ordre correcte per respectar les dependències entre claus foranes, començant per les taules sense FKs i acabant per les que en depenen. S'han aplicat les restriccions adequades: `PRIMARY KEY`, `FOREIGN KEY`, `NOT NULL`, `UNIQUE` i `CHECK`.
 
-L'ordre de creació ha estat:
-
-1. Departaments
-2. Clients
-3. Grups_Qualitat
-4. Config_Servidor
-5. Categories_Video
-6. Productes
-7. Grup_Nivell
-8. Empleats
-9. Usuaris
-10. Nomines
-11. Videos
-12. Comandes
-13. Cistell
-14. Trucades
-15. Mesures_Bandwidth
-16. Quotes_Usuari
-17. Avisos
-18. Backup_Log
-
-La taula `Avisos` s'ha configurat amb motor **MyISAM** en lloc d'InnoDB per evitar que els registres d'auditoria es perdin quan un trigger llança un error i MySQL fa rollback de la transacció:
-
-```sql
-ALTER TABLE Avisos ENGINE = MyISAM;
-```
-
-A continuació es mostra un exemple de creació de la taula `Trucades`, la més complexa pel fet que té quatre claus foranes i dos camps nullables per al destí:
+A continuació es mostra la taula `Trucades` com a exemple, per ser la més complexa amb quatre claus foranes i la lògica de destí nullable:
 
 ```sql
 CREATE TABLE Trucades (
@@ -125,58 +117,38 @@ CREATE TABLE Trucades (
 );
 ```
 
-Verificació de les taules creades:
+Verificació de les 18 taules creades correctament:
 
-```
-mysql> SHOW TABLES;
-+---------------------------+
-| Tables_in_innovatetech    |
-+---------------------------+
-| Avisos                    |
-| Backup_Log                |
-| Categories_Video          |
-| Cistell                   |
-| Clients                   |
-| Comandes                  |
-| Config_Servidor           |
-| Departaments              |
-| Empleats                  |
-| Grup_Nivell               |
-| Grups_Qualitat            |
-| Mesures_Bandwidth         |
-| Nomines                   |
-| Productes                 |
-| Quotes_Usuari             |
-| Trucades                  |
-| Usuaris                   |
-| Videos                    |
-+---------------------------+
-18 rows in set (0.00 sec)
-```
+![Verificació SHOW TABLES](imatges/captura_2.png)
+
+### Ampliació: Inserció automàtica de mesures d'ample de banda
+
+S'ha implementat un script Bash (`mesura_bandwidth.sh`) que executa `speedtest-cli` automàticament i insereix els resultats directament a la taula `Mesures_Bandwidth`, classificant el resultat com a acceptable o no acceptable segons uns llindars mínims definits (10 Mbps baixada, 5 Mbps pujada, latència < 100ms).
+
+![Mesura automàtica de bandwidth](imatges/captura_2_5.png)
 
 ---
 
 ## 3.5 Rols i permisos
 
-S'han creat quatre rols amb permisos diferenciats segons les necessitats de cada perfil d'usuari:
+### Rols demanats per l'enunciat
 
 | Rol | Permisos principals | Restriccions |
 |---|---|---|
-| `admin` | Accés total a totes les taules | Pot gestionar altres usuaris |
+| `admin` | Accés total a totes les taules | Pot gestionar altres usuaris i la taula d'avisos |
 | `vendes` | SELECT, INSERT, UPDATE sobre Clients, Comandes, Productes, Cistell, Trucades | No pot modificar taules de personal ni nòmines |
 | `administracio` | SELECT, INSERT, UPDATE sobre Empleats, Nomines, Departaments, Grup_Nivell | No pot accedir al sistema de trucades de clients |
 | `treballador` | SELECT sobre Productes, Videos, Config_Servidor. SELECT i INSERT sobre Trucades | No pot modificar taules de personal ni nòmines |
 
-Creació dels rols i assignació de permisos:
+### Rols creats
 
 ```sql
--- Creació dels rols
-CREATE ROLE 'admin';
-CREATE ROLE 'vendes';
-CREATE ROLE 'administracio';
-CREATE ROLE 'treballador';
+CREATE ROLE IF NOT EXISTS 'admin';
+CREATE ROLE IF NOT EXISTS 'vendes';
+CREATE ROLE IF NOT EXISTS 'administracio';
+CREATE ROLE IF NOT EXISTS 'treballador';
 
--- Permisos rol vendes (exemple)
+-- Exemple permisos rol vendes
 GRANT SELECT, INSERT, UPDATE ON innovatetech.Clients TO 'vendes';
 GRANT SELECT, INSERT, UPDATE ON innovatetech.Comandes TO 'vendes';
 GRANT SELECT, INSERT, UPDATE ON innovatetech.Productes TO 'vendes';
@@ -184,69 +156,28 @@ GRANT SELECT, INSERT, UPDATE ON innovatetech.Cistell TO 'vendes';
 GRANT SELECT, INSERT, UPDATE ON innovatetech.Trucades TO 'vendes';
 ```
 
-Verificació dels permisos assignats:
+### Verificació dels permisos
 
-```
-mysql> SHOW GRANTS FOR 'vendes';
-+-----------------------------------------------------------------------+
-| Grants for vendes@%                                                   |
-+-----------------------------------------------------------------------+
-| GRANT USAGE ON *.* TO `vendes`@`%`                                    |
-| GRANT SELECT, INSERT, UPDATE ON `innovatetech`.`Cistell` TO `vendes`  |
-| GRANT SELECT, INSERT, UPDATE ON `innovatetech`.`Clients` TO `vendes`  |
-| GRANT SELECT, INSERT, UPDATE ON `innovatetech`.`Comandes` TO `vendes` |
-| GRANT SELECT, INSERT, UPDATE ON `innovatetech`.`Productes` TO `vendes`|
-| GRANT SELECT, INSERT, UPDATE ON `innovatetech`.`Trucades` TO `vendes` |
-+-----------------------------------------------------------------------+
-```
+![Verificació SHOW GRANTS](imatges/captura_3.png)
 
 ---
 
 ## 3.6 Script de creació automatitzada d'usuaris
 
-S'ha creat un script en Bash (`scriptusuaris.sh`) que automatitza la creació d'usuaris a la base de dades. L'script:
+S'ha creat un script en Bash (`scriptusuaris.sh`) que automatitza la creació d'usuaris a la base de dades amb les següents funcionalitats:
 
 - Permet donar d'alta un o més usuaris alhora.
 - Executa les sentències `CREATE USER` i `GRANT` corresponents al rol assignat.
-- Genera un fitxer `usuaris_creats.sql` amb les sentències SQL resultants.
+- Genera un fitxer `usuaris_creats.sql` amb les sentències SQL resultants per poder revisar-les i executar-les posteriorment.
 - Assigna el rol correcte a cada usuari en el moment de la creació.
 - Gestiona errors: usuari ja existent, rol no vàlid.
 - Assigna `GRANT FILE` per permetre operacions de backup.
 
-Exemple d'execució i resultat:
+Demostració d'execució creant dos usuaris:
 
-```
-$ sudo bash scriptusuaris.sh
-=============================================
- CREACIÓ AUTOMATITZADA D'USUARIS - InnovateTech
-=============================================
+![Execució script usuaris](imatges/captura_4.png)
 
-Quants usuaris vols crear? 2
-
---- Usuari 1 de 2 ---
-Nom d'usuari: user_vendes
-Contrasenya:
-Host (Enter per 'localhost'):
-Rols disponibles: admin vendes administracio treballador
-Rol: vendes
-Usuari 'user_vendes'@'localhost' creat correctament amb rol 'vendes'.
-
---- Usuari 2 de 2 ---
-Nom d'usuari: user_administracio
-Contrasenya:
-Host (Enter per 'localhost'):
-Rols disponibles: admin vendes administracio treballador
-Rol: administracio
-Usuari 'user_administracio'@'localhost' creat correctament amb rol 'administracio'.
-
-=============================================
- Usuaris creats:  2
- Errors:          0
- Fitxer SQL:      usuaris_creats.sql
-=============================================
-```
-
-Contingut del fitxer `usuaris_creats.sql` generat automàticament:
+El fitxer `usuaris_creats.sql` generat automàticament conté les sentències SQL per poder revisar i executar posteriorment:
 
 ```sql
 -- Usuari: user_vendes@localhost | Rol: vendes
@@ -255,17 +186,24 @@ GRANT 'vendes' TO 'user_vendes'@'localhost';
 SET DEFAULT ROLE 'vendes' TO 'user_vendes'@'localhost';
 GRANT FILE ON *.* TO 'user_vendes'@'localhost';
 FLUSH PRIVILEGES;
+
+-- Usuari: user_administracio@localhost | Rol: administracio
+CREATE USER 'user_administracio'@'localhost' IDENTIFIED BY '***';
+GRANT 'administracio' TO 'user_administracio'@'localhost';
+SET DEFAULT ROLE 'administracio' TO 'user_administracio'@'localhost';
+GRANT FILE ON *.* TO 'user_administracio'@'localhost';
+FLUSH PRIVILEGES;
 ```
 
 ---
 
 ## 3.7 Triggers i comprovacions
 
-S'han implementat cinc triggers per garantir la seguretat i el control d'accés a la base de dades. Tots els triggers que bloquegen operacions registren prèviament l'intent a la taula `Avisos` abans de llançar l'error.
+S'han implementat cinc triggers per garantir la seguretat i el control d'accés. Tots els triggers que bloquegen operacions registren prèviament l'intent a la taula `Avisos` (motor MyISAM) abans de llançar l'error, garantint que el registre d'auditoria no es perdi mai.
 
 ### Trigger 1 — Bloqueig d'usuaris
 
-Impedeix que un usuari amb estat `bloquejat` pugui realitzar o rebre trucades.
+Impedeix que un usuari amb estat `bloquejat` pugui realitzar o rebre trucades. S'executa `BEFORE INSERT` a `Trucades`, comprova l'estat tant de l'usuari origen com del destí (si és intern), registra l'intent a `Avisos` i llança un `SIGNAL` per bloquejar l'operació.
 
 ```sql
 CREATE TRIGGER trg_bloqueig_usuari
@@ -273,49 +211,26 @@ BEFORE INSERT ON Trucades
 FOR EACH ROW
 BEGIN
     DECLARE estat_origen VARCHAR(10);
-    DECLARE estat_desti VARCHAR(10);
-
     SELECT estat INTO estat_origen
     FROM Usuaris WHERE id_usuari = NEW.id_usuari_origen;
-
-    IF NEW.id_usuari_desti IS NOT NULL THEN
-        SELECT estat INTO estat_desti
-        FROM Usuaris WHERE id_usuari = NEW.id_usuari_desti;
-    END IF;
 
     IF estat_origen = 'bloquejat' THEN
         INSERT INTO Avisos (usuari_db, taula_afectada, operacio, descripcio)
         VALUES (USER(), 'Trucades', 'INSERT',
-            CONCAT('Intent de trucada bloquejat. Usuari origen bloquejat: ',
-            NEW.id_usuari_origen));
+            CONCAT('Intent de trucada bloquejat. Usuari origen: ', NEW.id_usuari_origen));
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'ERROR: L usuari origen està bloquejat i no pot realitzar trucades.';
-    END IF;
-
-    IF NEW.id_usuari_desti IS NOT NULL AND estat_desti = 'bloquejat' THEN
-        INSERT INTO Avisos (usuari_db, taula_afectada, operacio, descripcio)
-        VALUES (USER(), 'Trucades', 'INSERT',
-            CONCAT('Intent de trucada bloquejat. Usuari destí bloquejat: ',
-            NEW.id_usuari_desti));
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'ERROR: L usuari destí està bloquejat i no pot rebre trucades.';
     END IF;
 END
 ```
 
-Comprovació — L'usuari 8 (Elena Llop) té estat `bloquejat`:
+Comprovació — l'usuari 8 (Elena Llop) té estat `bloquejat`:
 
-```
-mysql> INSERT INTO Trucades (id_usuari_origen, id_client_desti,
-    id_usuari_desti, data_inici, id_grup_qualitat)
-    VALUES (8, 1, NULL, NOW(), 1);
-
-ERROR 1644 (45000): ERROR: L usuari origen està bloquejat i no pot realitzar trucades.
-```
+![Comprovació trigger bloqueig](imatges/captura_5.png)
 
 ### Trigger 2 — Control de quota de minuts mensuals
 
-Impedeix noves trucades si l'usuari ha superat els minuts mensuals assignats al seu grup.
+Impedeix noves trucades si l'usuari ha superat els minuts mensuals assignats. Consulta la taula `Quotes_Usuari` filtrant pel mes actual amb `DATE_FORMAT(NOW(), '%Y-%m')` i compara els minuts consumits amb el límit.
 
 ```sql
 CREATE TRIGGER trg_control_minuts
@@ -334,30 +249,20 @@ BEGIN
     IF v_minuts_actuals IS NOT NULL AND (v_minuts_actuals >= v_limit_minuts) THEN
         INSERT INTO Avisos (usuari_db, taula_afectada, operacio, descripcio)
         VALUES (USER(), 'Trucades', 'INSERT',
-            CONCAT('Quota de minuts mensuals superada per usuari id: ',
-            NEW.id_usuari_origen));
+            CONCAT('Quota de minuts superada per usuari: ', NEW.id_usuari_origen));
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'ERROR: Has superat la quota de minuts mensuals.';
     END IF;
 END
 ```
 
-Comprovació:
+Comprovació — posem l'usuari 1 al límit de minuts i intentem una trucada:
 
-```
-mysql> UPDATE Quotes_Usuari SET minuts_consumits = 500
-    WHERE id_usuari = 1 AND mes_any = '2026-05';
-
-mysql> INSERT INTO Trucades (id_usuari_origen, id_client_desti,
-    id_usuari_desti, data_inici, id_grup_qualitat)
-    VALUES (1, 1, NULL, NOW(), 1);
-
-ERROR 1644 (45000): ERROR: Has superat la quota de minuts mensuals.
-```
+![Comprovació trigger minuts](imatges/captura_6.png)
 
 ### Trigger 3 — Control de trucades diàries
 
-Impedeix noves trucades si l'usuari ha superat el nombre màxim de trucades diàries.
+Impedeix noves trucades si l'usuari ha superat el nombre màxim de trucades diàries. Funciona igual que el trigger de minuts però comprovant el camp `trucades_avui`. S'han usat noms de variables amb prefix `v_` per evitar conflictes amb els noms dels camps de la taula.
 
 ```sql
 CREATE TRIGGER trg_control_trucades_dia
@@ -376,30 +281,20 @@ BEGIN
     IF v_trucades_avui IS NOT NULL AND (v_trucades_avui >= v_limit_trucades) THEN
         INSERT INTO Avisos (usuari_db, taula_afectada, operacio, descripcio)
         VALUES (USER(), 'Trucades', 'INSERT',
-            CONCAT('Quota de trucades diàries superada per usuari id: ',
-            NEW.id_usuari_origen));
+            CONCAT('Quota diària superada per usuari: ', NEW.id_usuari_origen));
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'ERROR: Has superat el nombre màxim de trucades diàries.';
     END IF;
 END
 ```
 
-Comprovació:
+Comprovació — posem l'usuari 1 al límit de trucades diàries:
 
-```
-mysql> UPDATE Quotes_Usuari SET trucades_avui = 10
-    WHERE id_usuari = 1 AND mes_any = '2026-05';
+![Comprovació trigger trucades diàries](imatges/captura_7.png)
 
-mysql> INSERT INTO Trucades (id_usuari_origen, id_client_desti,
-    id_usuari_desti, data_inici, id_grup_qualitat)
-    VALUES (1, 1, NULL, NOW(), 1);
+### Trigger 4 — Auditoria d'accés a Nòmines
 
-ERROR 1644 (45000): ERROR: Has superat el nombre màxim de trucades diàries.
-```
-
-### Trigger 4 — Auditoria d'accés a Nomines
-
-Registra i bloqueja qualsevol intent de modificació de la taula `Nomines` per part d'usuaris amb rol `vendes` o `treballador`. El trigger s'identifica per nom d'usuari de MySQL mitjançant la funció `USER()`.
+Registra i bloqueja qualsevol intent de modificació de la taula `Nòmines` per part d'usuaris amb rol `vendes` o `treballador`. S'identifica el rol de l'usuari mitjançant la funció `USER()` de MySQL, que retorna el nom de l'usuari connectat.
 
 ```sql
 CREATE TRIGGER trg_audit_nomines
@@ -409,7 +304,7 @@ BEGIN
     IF USER() LIKE '%vendes%' OR USER() LIKE '%treballador%' THEN
         INSERT INTO Avisos (usuari_db, taula_afectada, operacio, descripcio)
         VALUES (USER(), 'Nomines', 'UPDATE',
-            CONCAT('Intent no autoritzat de modificar taula Nomines: ', USER()));
+            CONCAT('Intent no autoritzat de modificar Nomines: ', USER()));
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'ERROR: No tens permisos per modificar la taula Nomines.';
     END IF;
@@ -418,14 +313,11 @@ END
 
 Comprovació — connectats amb l'usuari `test_vendes`:
 
-```
-mysql> UPDATE Nomines SET salari_base = 9999 WHERE dni = '12345678A';
-ERROR 1644 (45000): ERROR: No tens permisos per modificar la taula Nomines.
-```
+![Comprovació trigger auditoria nòmines](imatges/captura_8.png)
 
 ### Trigger 5 — Auditoria d'accés a Trucades
 
-Registra i bloqueja qualsevol intent d'accés a la taula `Trucades` per part d'usuaris amb rol `administracio`.
+Registra i bloqueja qualsevol intent d'accés a la taula `Trucades` per part d'usuaris amb rol `administracio`, que per definició no hauria de poder gestionar trucades de clients.
 
 ```sql
 CREATE TRIGGER trg_audit_trucades
@@ -444,13 +336,15 @@ END
 
 Comprovació — connectats amb l'usuari `test_administracio`:
 
-```
-mysql> INSERT INTO Trucades (id_usuari_origen, id_client_desti,
-    id_usuari_desti, data_inici, id_grup_qualitat)
-    VALUES (1, 1, NULL, NOW(), 1);
+![Comprovació trigger auditoria trucades](imatges/captura_9.png)
 
-ERROR 1644 (45000): ERROR: No tens permisos per accedir a les trucades de clients.
-```
+### Ampliació: Notificacions automàtiques a Discord
+
+S'ha implementat un script Bash (`notificacions_discord.sh`) que revisa periòdicament la taula `Avisos` i envia una notificació al canal `#avisos-seguretat` de Discord via webhook quan detecta nous intents d'accés no autoritzat.
+
+L'script manté un fitxer de control (`last_avis_id.txt`) per recordar l'últim avís processat i evitar notificacions duplicades. Cada notificació inclou: ID de l'avís, usuari de BD, taula afectada, operació intentada, data i hora i descripció.
+
+![Notificació Discord](imatges/captura_discord.png)
 
 ---
 
@@ -500,13 +394,6 @@ BEGIN
 END
 ```
 
-Verificació de l'event:
+Verificació de l'event actiu i registre a `Backup_Log`:
 
-```
-mysql> SHOW EVENTS;
-+--------------+------------------+----------------+-----------+-----------+
-| Db           | Name             | Definer        | Type      | Status    |
-+--------------+------------------+----------------+-----------+-----------+
-| innovatetech | evt_backup_diari | root@localhost | RECURRING | ENABLED   |
-+--------------+------------------+----------------+-----------+-----------+
-```
+![Verificació backup](imatges/captura_10.png)
