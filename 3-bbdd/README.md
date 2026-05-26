@@ -119,13 +119,13 @@ CREATE TABLE Trucades (
 
 Verificació de les 18 taules creades correctament:
 
-![Verificació SHOW TABLES](imatges/captura_2.png)
+![Verificació SHOW TABLES](imatges/show_tables.png)
 
 ### Ampliació: Inserció automàtica de mesures d'ample de banda
 
 S'ha implementat un script Bash (`mesura_bandwidth.sh`) que executa `speedtest-cli` automàticament i insereix els resultats directament a la taula `Mesures_Bandwidth`, classificant el resultat com a acceptable o no acceptable segons uns llindars mínims definits (10 Mbps baixada, 5 Mbps pujada, latència < 100ms).
 
-![Mesura automàtica de bandwidth](imatges/captura_2_5.png)
+![Mesura automàtica de bandwidth](imatges/mesura_amplebanda.png)
 
 ---
 
