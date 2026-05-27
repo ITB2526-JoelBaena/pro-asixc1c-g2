@@ -158,7 +158,7 @@ GRANT SELECT, INSERT, UPDATE ON innovatetech.Trucades TO 'vendes';
 
 ### Verificació dels permisos
 
-![Verificació SHOW GRANTS](imatges/captura_3.png)
+![Verificació SHOW GRANTS](imatges/grants.png)
 
 ---
 
