@@ -85,7 +85,8 @@ Registra cada execució del backup automàtic: quan s'ha executat, quines taules
 ## 3.4 Creació de les taules i inserció de dades
 
 Les taules s'han creat seguint l'ordre correcte per respectar les dependències entre claus foranes, començant per les taules sense FKs i acabant per les que en depenen. S'han aplicat les restriccions adequades: `PRIMARY KEY`, `FOREIGN KEY`, `NOT NULL`, `UNIQUE` i `CHECK`.
-
+([`creartaules.sql`](../sql/creartaules.sql)
+([`trigger2.sql`](../sql/insertardades.sql))
 A continuació es mostra la taula `Trucades` com a exemple, per ser la més complexa amb quatre claus foranes i la lògica de destí nullable:
 
 ```sql
@@ -117,6 +118,18 @@ CREATE TABLE Trucades (
 );
 ```
 
+```sql
+INSERT INTO Trucades (id_usuari_origen, id_client_desti, id_usuari_desti, data_inici, data_fi, durac>
+(1, 1, NULL, '2025-03-01 09:00:00', '2025-03-01 09:25:00', 25.00, 1, 5, 'Excel·lent atenció'),
+(2, 2, NULL, '2025-03-01 10:00:00', '2025-03-01 10:15:00', 15.00, 1, 4, 'Bona trucada'),
+(3, NULL, 4, '2025-03-02 11:00:00', '2025-03-02 11:30:00', 30.00, 2, NULL, NULL),
+(4, 3, NULL, '2025-03-02 12:00:00', '2025-03-02 12:10:00', 10.00, 2, 3, 'Acceptable'),
+(5, NULL, 6, '2025-03-03 09:30:00', '2025-03-03 09:45:00', 15.00, 2, NULL, NULL),
+(1, 4, NULL, '2025-03-03 10:00:00', '2025-03-03 10:45:00', 45.00, 1, 5, 'Molt satisfactori'),
+(7, NULL, 8, '2025-03-04 11:00:00', '2025-03-04 11:20:00', 20.00, 3, NULL, NULL),
+(9, 5, NULL, '2025-03-04 12:00:00', '2025-03-04 12:30:00', 30.00, 1, 4, 'Bona gestió');
+```
+
 Verificació de les 18 taules creades correctament:
 
 ![Verificació SHOW TABLES](../img/bbdd/show_tables.png)
@@ -139,7 +152,7 @@ S'ha implementat un script Bash ([`amplebanda.sh`](../scripts/amplebanda.sh)) qu
 | `vendes` | SELECT, INSERT, UPDATE sobre Clients, Comandes, Productes, Cistell, Trucades | No pot modificar taules de personal ni nòmines |
 | `administracio` | SELECT, INSERT, UPDATE sobre Empleats, Nomines, Departaments, Grup_Nivell | No pot accedir al sistema de trucades de clients |
 | `treballador` | SELECT sobre Productes, Videos, Config_Servidor. SELECT i INSERT sobre Trucades | No pot modificar taules de personal ni nòmines |
-
+([`crear_rols`](../sql/crear_rols.sql))
 ### Rols creats
 
 ```sql
@@ -206,7 +219,7 @@ S'han implementat cinc triggers per garantir la seguretat i el control d'accés.
 ### Trigger 1 — Bloqueig d'usuaris
 
 Impedeix que un usuari amb estat `bloquejat` pugui realitzar o rebre trucades. S'executa `BEFORE INSERT` a `Trucades`, comprova l'estat tant de l'usuari origen com del destí (si és intern), registra l'intent a `Avisos` i llança un `SIGNAL` per bloquejar l'operació.
-
+([`trigger1.sql`](../sql/trigger_bloqueig.sql))
 ```sql
 CREATE TRIGGER trg_bloqueig_usuari
 BEFORE INSERT ON Trucades
@@ -231,9 +244,8 @@ Comprovació — l'usuari 8 (Elena Llop) té estat `bloquejat`:
 ![Comprovació trigger bloqueig](../img/bbdd/trigger1.png)
 
 ### Trigger 2 — Control de quota de minuts mensuals
-
 Impedeix noves trucades si l'usuari ha superat els minuts mensuals assignats. Consulta la taula `Quotes_Usuari` filtrant pel mes actual amb `DATE_FORMAT(NOW(), '%Y-%m')` i compara els minuts consumits amb el límit.
-
+([`trigger2.sql`](../sql/trigger_trucades_mensuals.sql))
 ```sql
 CREATE TRIGGER trg_control_minuts
 BEFORE INSERT ON Trucades
@@ -263,9 +275,8 @@ Comprovació — posem l'usuari 1 al límit de minuts i intentem una trucada:
 ![Comprovació trigger minuts](../img/bbdd/trigger2.png)
 
 ### Trigger 3 — Control de trucades diàries
-
 Impedeix noves trucades si l'usuari ha superat el nombre màxim de trucades diàries. Funciona igual que el trigger de minuts però comprovant el camp `trucades_avui`. S'han usat noms de variables amb prefix `v_` per evitar conflictes amb els noms dels camps de la taula.
-
+([`trigger1.sql`](../sql/trigger_trucadesdiariessql))
 ```sql
 CREATE TRIGGER trg_control_trucades_dia
 BEFORE INSERT ON Trucades
@@ -295,9 +306,8 @@ Comprovació — posem l'usuari 1 al límit de trucades diàries:
 ![Comprovació trigger trucades diàries](../img/bbdd/trigger3.png)
 
 ### Trigger 4 — Auditoria d'accés a Nòmines
-
 Registra i bloqueja qualsevol intent de modificació de la taula `Nòmines` per part d'usuaris amb rol `vendes` o `treballador`. S'identifica el rol de l'usuari mitjançant la funció `USER()` de MySQL, que retorna el nom de l'usuari connectat.
-
+([`trigger4.sql`](../sql/triggeraudit/vendes_audit.sql))
 ```sql
 CREATE TRIGGER trg_audit_nomines
 BEFORE UPDATE ON Nomines
@@ -320,7 +330,7 @@ Comprovació — connectats amb l'usuari `test_vendes`:
 ### Trigger 5 — Auditoria d'accés a Trucades
 
 Registra i bloqueja qualsevol intent d'accés a la taula `Trucades` per part d'usuaris amb rol `administracio`, que per definició no hauria de poder gestionar trucades de clients.
-
+([`trigger5.sql`](../sql/triggeraudit/audit_trucades.sql))
 ```sql
 CREATE TRIGGER trg_audit_trucades
 BEFORE INSERT ON Trucades
@@ -401,5 +411,8 @@ END
 Verificació de l'event actiu i registre a `Backup_Log`:
 
 ![Verificació backup](../img/bbdd/backup.png)
+
+([`backup.sql`](../sql/backup.sql))
+
 
 **Nota:** El event backup es recurrent, es realitza a les 2:00 AM. Però per fer la comprovació hem canviat el event per a que es faci una vegada ara mateix.
