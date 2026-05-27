@@ -88,7 +88,7 @@ Les taules s'han creat seguint l'ordre correcte per respectar les dependències 
 A continuació es mostra la taula `Trucades` com a exemple, per ser la més complexa amb quatre claus foranes i la lògica de destí nullable:
 
 ([`creartaules.sql`](../sql/creartaules.sql))
-([`trigger2.sql`](../sql/insertardades.sql))
+([`insertardades.sql`](../sql/insertardades.sql))
 
 ```sql
 CREATE TABLE Trucades (
@@ -153,7 +153,9 @@ S'ha implementat un script Bash ([`amplebanda.sh`](../scripts/amplebanda.sh)) qu
 | `vendes` | SELECT, INSERT, UPDATE sobre Clients, Comandes, Productes, Cistell, Trucades | No pot modificar taules de personal ni nòmines |
 | `administracio` | SELECT, INSERT, UPDATE sobre Empleats, Nomines, Departaments, Grup_Nivell | No pot accedir al sistema de trucades de clients |
 | `treballador` | SELECT sobre Productes, Videos, Config_Servidor. SELECT i INSERT sobre Trucades | No pot modificar taules de personal ni nòmines |
+
 ([`crear_rols`](../sql/crear_rols.sql))
+
 ### Rols creats
 
 ```sql
@@ -220,7 +222,7 @@ S'han implementat cinc triggers per garantir la seguretat i el control d'accés.
 ### Trigger 1 — Bloqueig d'usuaris
 
 Impedeix que un usuari amb estat `bloquejat` pugui realitzar o rebre trucades. S'executa `BEFORE INSERT` a `Trucades`, comprova l'estat tant de l'usuari origen com del destí (si és intern), registra l'intent a `Avisos` i llança un `SIGNAL` per bloquejar l'operació.
-([`trigger1.sql`](../sql/trigger_bloqueig.sql))
+([`trigger_bloqueig.sql`](../sql/trigger_bloqueig.sql))
 ```sql
 CREATE TRIGGER trg_bloqueig_usuari
 BEFORE INSERT ON Trucades
@@ -246,7 +248,7 @@ Comprovació — l'usuari 8 (Elena Llop) té estat `bloquejat`:
 
 ### Trigger 2 — Control de quota de minuts mensuals
 Impedeix noves trucades si l'usuari ha superat els minuts mensuals assignats. Consulta la taula `Quotes_Usuari` filtrant pel mes actual amb `DATE_FORMAT(NOW(), '%Y-%m')` i compara els minuts consumits amb el límit.
-([`trigger2.sql`](../sql/trigger_trucades_mensuals.sql))
+([`trigger_trucades_mensuals.sql`](../sql/trigger_trucades_mensuals.sql))
 ```sql
 CREATE TRIGGER trg_control_minuts
 BEFORE INSERT ON Trucades
@@ -277,7 +279,7 @@ Comprovació — posem l'usuari 1 al límit de minuts i intentem una trucada:
 
 ### Trigger 3 — Control de trucades diàries
 Impedeix noves trucades si l'usuari ha superat el nombre màxim de trucades diàries. Funciona igual que el trigger de minuts però comprovant el camp `trucades_avui`. S'han usat noms de variables amb prefix `v_` per evitar conflictes amb els noms dels camps de la taula.
-([`trigger1.sql`](../sql/trigger_trucadesdiariessql))
+([`trigger_trucadesdiaries.sql`](../sql/trigger_trucadesdiaries.sql))
 ```sql
 CREATE TRIGGER trg_control_trucades_dia
 BEFORE INSERT ON Trucades
@@ -308,7 +310,7 @@ Comprovació — posem l'usuari 1 al límit de trucades diàries:
 
 ### Trigger 4 — Auditoria d'accés a Nòmines
 Registra i bloqueja qualsevol intent de modificació de la taula `Nòmines` per part d'usuaris amb rol `vendes` o `treballador`. S'identifica el rol de l'usuari mitjançant la funció `USER()` de MySQL, que retorna el nom de l'usuari connectat.
-([`trigger4.sql`](../sql/triggeraudit/vendes_audit.sql))
+([`vendes_audit.sql`](../sql/triggeraudit/vendes_audit.sql))
 ```sql
 CREATE TRIGGER trg_audit_nomines
 BEFORE UPDATE ON Nomines
@@ -331,7 +333,7 @@ Comprovació — connectats amb l'usuari `test_vendes`:
 ### Trigger 5 — Auditoria d'accés a Trucades
 
 Registra i bloqueja qualsevol intent d'accés a la taula `Trucades` per part d'usuaris amb rol `administracio`, que per definició no hauria de poder gestionar trucades de clients.
-([`trigger5.sql`](../sql/triggeraudit/audit_trucades.sql))
+([`audit_trucades.sql`](../sql/triggeraudit/audit_trucades.sql))
 ```sql
 CREATE TRIGGER trg_audit_trucades
 BEFORE INSERT ON Trucades
