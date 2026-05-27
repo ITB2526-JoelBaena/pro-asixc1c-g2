@@ -228,7 +228,7 @@ END
 
 Comprovació — l'usuari 8 (Elena Llop) té estat `bloquejat`:
 
-![Comprovació trigger bloqueig](imatges/captura_5.png)
+![Comprovació trigger bloqueig](imatges/trigger1.png)
 
 ### Trigger 2 — Control de quota de minuts mensuals
 
@@ -260,7 +260,7 @@ END
 
 Comprovació — posem l'usuari 1 al límit de minuts i intentem una trucada:
 
-![Comprovació trigger minuts](imatges/captura_6.png)
+![Comprovació trigger minuts](imatges/trigger2.png)
 
 ### Trigger 3 — Control de trucades diàries
 
@@ -292,7 +292,7 @@ END
 
 Comprovació — posem l'usuari 1 al límit de trucades diàries:
 
-![Comprovació trigger trucades diàries](imatges/captura_7.png)
+![Comprovació trigger trucades diàries](imatges/trigger3.png)
 
 ### Trigger 4 — Auditoria d'accés a Nòmines
 
@@ -315,7 +315,7 @@ END
 
 Comprovació — connectats amb l'usuari `test_vendes`:
 
-![Comprovació trigger auditoria nòmines](imatges/captura_8.png)
+![Comprovació trigger auditoria nòmines](imatges/trigger4.png)
 
 ### Trigger 5 — Auditoria d'accés a Trucades
 
@@ -338,15 +338,17 @@ END
 
 Comprovació — connectats amb l'usuari `test_administracio`:
 
-![Comprovació trigger auditoria trucades](imatges/captura_9.png)
+![Comprovació trigger auditoria trucades](imatges/trigger5.png)
 
 ### Ampliació: Notificacions automàtiques a Discord
 
 S'ha implementat un script Bash (`notificacions_discord.sh`) que revisa periòdicament la taula `Avisos` i envia una notificació al canal `#avisos-seguretat` de Discord via webhook quan detecta nous intents d'accés no autoritzat.
 
+![Bash Discord](imatges/bash_discord.png)
+
 L'script manté un fitxer de control (`last_avis_id.txt`) per recordar l'últim avís processat i evitar notificacions duplicades. Cada notificació inclou: ID de l'avís, usuari de BD, taula afectada, operació intentada, data i hora i descripció.
 
-![Notificació Discord](imatges/captura_discord.png)
+![Notificació Discord](imatges/discord.png)
 
 ---
 
@@ -398,4 +400,6 @@ END
 
 Verificació de l'event actiu i registre a `Backup_Log`:
 
-![Verificació backup](imatges/captura_10.png)
+![Verificació backup](imatges/backup.png)
+
+**Nota:** El event backup es recurrent, es realitza a les 2:00 AM. Però per fer la comprovació hem canviat el event per a que es faci una vegada ara mateix.
