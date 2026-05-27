@@ -283,8 +283,6 @@ S'utilitza el `vockey` de AWS Academy. El fitxer `labsuser.pem` es descarrega de
 chmod 400 labsuser.pem
 ```
 
-> **Nota:** si es perd el fitxer `labsuser.pem` no es pot tornar a descarregar i caldria recrear les instàncies.
-
 [↑ Tornar a l'índex](#index)
 
 ---
