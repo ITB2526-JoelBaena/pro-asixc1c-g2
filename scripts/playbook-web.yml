@@ -1,1 +1,191 @@
-# ansible
+---
+- name: Configurar servidor Web InnovateTech
+  hosts: localhost
+  become: yes
+
+  tasks:
+
+    - name: Actualitzar el sistema
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Instal·lar paquets necessaris
+      apt:
+        name:
+          - apache2
+          - libpam-ldapd
+          - libnss-ldapd
+          - ldap-utils
+          - syslog-ng
+        state: present
+
+    - name: Habilitar Apache
+      systemd:
+        name: apache2
+        enabled: yes
+        state: started
+
+    - name: Crear pàgina web InnovateTech
+      copy:
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+        content: |
+          <!DOCTYPE html>
+          <html lang="ca">
+          <head>
+              <meta charset="UTF-8">
+              <title>InnovateTech — Serveis Tecnològics</title>
+              <style>
+                  * { margin: 0; padding: 0; box-sizing: border-box; }
+                  body { font-family: Arial, sans-serif; background: #0C3B6E; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+                  .container { text-align: center; padding: 40px; background: rgba(255,255,255,0.1); border-radius: 12px; max-width: 600px; }
+                  h1 { font-size: 2.5em; margin-bottom: 10px; }
+                  p { font-size: 1.1em; margin: 10px 0; color: #A0C4E8; }
+                  .dept { display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap; }
+                  .dept span { background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 20px; }
+                  .status { margin-top: 30px; font-size: 0.85em; color: #5DCAA5; }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1>InnovateTech</h1>
+                  <p>Provisió de Serveis Tecnològics</p>
+                  <p>Barcelona, Catalunya</p>
+                  <div class="dept">
+                      <span>Vendes</span>
+                      <span>Suport Tècnic</span>
+                      <span>Administració</span>
+                      <span>Logística</span>
+                      <span>Direcció</span>
+                  </div>
+                  <p class="status">✅ Servidor web operatiu — Projecte Transversal ASIXc1</p>
+              </div>
+          </body>
+          </html>
+
+    - name: Configurar nslcd.conf
+      copy:
+        dest: /etc/nslcd.conf
+        content: |
+          uid nslcd
+          gid nslcd
+          uri ldap://10.0.1.10
+          base dc=innovatetech,dc=local
+          timelimit 3
+          bind_timelimit 3
+          idle_timelimit 60
+        mode: '0640'
+
+    - name: Configurar nsswitch.conf
+      copy:
+        dest: /etc/nsswitch.conf
+        content: |
+          passwd:         files ldap
+          group:          files ldap
+          shadow:         files ldap
+          gshadow:        files
+          hosts:          files dns
+          networks:       files
+          protocols:      db files
+          services:       db files
+          ethers:         db files
+          rpc:            db files
+
+    - name: Configurar sshd_config
+      blockinfile:
+        path: /etc/ssh/sshd_config
+        block: |
+          PasswordAuthentication yes
+          UsePAM yes
+          KbdInteractiveAuthentication yes
+
+    - name: Habilitar PasswordAuthentication a cloudimg
+      lineinfile:
+        path: /etc/ssh/sshd_config.d/60-cloudimg-settings.conf
+        regexp: '^PasswordAuthentication'
+        line: 'PasswordAuthentication yes'
+
+    - name: Configurar SFTP
+      blockinfile:
+        path: /etc/ssh/sshd_config
+        marker: "# {mark} SFTP CONFIG"
+        block: |
+          Subsystem sftp internal-sftp
+          Match Group ldap-users
+              ChrootDirectory /sftp/%u
+              ForceCommand internal-sftp
+              AllowTcpForwarding no
+              X11Forwarding no
+
+    - name: Crear grup ldap-users
+      group:
+        name: ldap-users
+        state: present
+
+    - name: Crear directoris SFTP
+      file:
+        path: "/sftp/{{ item }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+      loop:
+        - mnadal
+        - mbatlle
+        - lcomes
+        - jfont
+        - cgil
+        - ahuguet
+        - sisern
+        - pjover
+        - ellop
+        - rmas
+
+    - name: Crear carpeta files dins SFTP
+      file:
+        path: "/sftp/{{ item }}/files"
+        state: directory
+        mode: '0755'
+      loop:
+        - mnadal
+        - mbatlle
+        - lcomes
+        - jfont
+        - cgil
+        - ahuguet
+        - sisern
+        - pjover
+        - ellop
+        - rmas
+
+    - name: Configurar syslog-ng per enviar logs
+      blockinfile:
+        path: /etc/syslog-ng/syslog-ng.conf
+        block: |
+          destination d_logserver {
+              udp("10.0.1.31" port(514));
+          };
+          log {
+              source(s_src);
+              destination(d_logserver);
+          };
+
+    - name: Instal·lar Netdata
+      shell: |
+        wget -O /tmp/netdata-kickstart.sh https://get.netdata.cloud/kickstart.sh
+        sudo sh /tmp/netdata-kickstart.sh --non-interactive
+      args:
+        creates: /usr/sbin/netdata
+
+    - name: Reiniciar serveis
+      systemd:
+        name: "{{ item }}"
+        state: restarted
+      loop:
+        - apache2
+        - ssh
+        - nslcd
+        - syslog-ng
