@@ -18,7 +18,7 @@ No s'ha utilitzat RDS d'AWS perquè té un cost elevat. La base de dades s'ha de
 
 El diagrama E/R representa les 18 entitats de la base de dades d'InnovateTech, les seves relacions i cardinalitats. Les entitats s'han agrupat per colors segons la seva funció: blau per al personal, verd per als usuaris i clients, taronja per a les comunicacions, vermell per al comerç, gris per a l'auditoria i morat per als continguts multimèdia.
 
-![Diagrama E/R](../img/diagramaBBDD.png)
+![Diagrama E/R](../img/bbdd/diagramaBBDD.png)
 
 ---
 
@@ -119,13 +119,13 @@ CREATE TABLE Trucades (
 
 Verificació de les 18 taules creades correctament:
 
-![Verificació SHOW TABLES](../img/show_tables.png)
+![Verificació SHOW TABLES](../img/bbdd/show_tables.png)
 
 ### Ampliació: Inserció automàtica de mesures d'ample de banda
 
 S'ha implementat un script Bash (`mesura_bandwidth.sh`) que executa `speedtest-cli` automàticament i insereix els resultats directament a la taula `Mesures_Bandwidth`, classificant el resultat com a acceptable o no acceptable segons uns llindars mínims definits (10 Mbps baixada, 5 Mbps pujada, latència < 100ms).
 
-![Mesura automàtica de bandwidth](../img/mesura_amplebanda.png)
+![Mesura automàtica de bandwidth](../img/bbdd/mesura_amplebanda.png)
 
 ---
 
@@ -158,7 +158,7 @@ GRANT SELECT, INSERT, UPDATE ON innovatetech.Trucades TO 'vendes';
 
 ### Verificació dels permisos
 
-![Verificació SHOW GRANTS](../img/grants.png)
+![Verificació SHOW GRANTS](../img/bbdd/grants.png)
 
 ---
 
@@ -175,7 +175,7 @@ S'ha creat un script en Bash (`scriptusuaris.sh`) que automatitza la creació d'
 
 Demostració d'execució creant dos usuaris:
 
-![Execució script usuaris](../img/usuaris.png)
+![Execució script usuaris](../img/bbdd/usuaris.png)
 
 **Nota important:** Els usuaris creats han de seguir la convenció de nom nomUsuari_rol (per exemple: marc_vendes, anna_administracio). Els triggers d'auditoria identifiquen el rol de l'usuari mitjançant la funció USER() de MySQL, que retorna el nom de l'usuari connectat. Si un usuari no segueix aquesta convenció, els triggers no el detectaran correctament i les operacions no autoritzades no quedaran registrades a la taula Avisos.
 
@@ -228,7 +228,7 @@ END
 
 Comprovació — l'usuari 8 (Elena Llop) té estat `bloquejat`:
 
-![Comprovació trigger bloqueig](../img/trigger1.png)
+![Comprovació trigger bloqueig](../img/bbdd/trigger1.png)
 
 ### Trigger 2 — Control de quota de minuts mensuals
 
@@ -260,7 +260,7 @@ END
 
 Comprovació — posem l'usuari 1 al límit de minuts i intentem una trucada:
 
-![Comprovació trigger minuts](../img/trigger2.png)
+![Comprovació trigger minuts](../img/bbdd/trigger2.png)
 
 ### Trigger 3 — Control de trucades diàries
 
@@ -292,7 +292,7 @@ END
 
 Comprovació — posem l'usuari 1 al límit de trucades diàries:
 
-![Comprovació trigger trucades diàries](../img/trigger3.png)
+![Comprovació trigger trucades diàries](../img/bbdd/trigger3.png)
 
 ### Trigger 4 — Auditoria d'accés a Nòmines
 
@@ -315,7 +315,7 @@ END
 
 Comprovació — connectats amb l'usuari `test_vendes`:
 
-![Comprovació trigger auditoria nòmines](../img/trigger4.png)
+![Comprovació trigger auditoria nòmines](../img/bbdd/trigger4.png)
 
 ### Trigger 5 — Auditoria d'accés a Trucades
 
@@ -338,17 +338,17 @@ END
 
 Comprovació — connectats amb l'usuari `test_administracio`:
 
-![Comprovació trigger auditoria trucades](../img/trigger5.png)
+![Comprovació trigger auditoria trucades](../img/bbdd/trigger5.png)
 
 ### Ampliació: Notificacions automàtiques a Discord
 
 S'ha implementat un script Bash (`notificacions_discord.sh`) que revisa periòdicament la taula `Avisos` i envia una notificació al canal `#avisos-seguretat` de Discord via webhook quan detecta nous intents d'accés no autoritzat.
 
-![Bash Discord](../img/bash_discord.png)
+![Bash Discord](../img/bbdd/bash_discord.png)
 
 L'script manté un fitxer de control (`last_avis_id.txt`) per recordar l'últim avís processat i evitar notificacions duplicades. Cada notificació inclou: ID de l'avís, usuari de BD, taula afectada, operació intentada, data i hora i descripció.
 
-![Notificació Discord](../img/discord.png)
+![Notificació Discord](../img/bbdd/discord.png)
 
 ---
 
@@ -400,6 +400,6 @@ END
 
 Verificació de l'event actiu i registre a `Backup_Log`:
 
-![Verificació backup](../img/backup.png)
+![Verificació backup](../img/bbdd/backup.png)
 
 **Nota:** El event backup es recurrent, es realitza a les 2:00 AM. Però per fer la comprovació hem canviat el event per a que es faci una vegada ara mateix.
