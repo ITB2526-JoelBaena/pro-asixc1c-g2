@@ -1,6 +1,6 @@
-# 3. Disseny i implementació d'una base de dades
+# 8. Disseny i implementació d'una base de dades
 
-## 3.1 Justificació del SGBD escollit
+## 8.1 Justificació del SGBD escollit
 
 S'ha escollit **MySQL 8.0** com a sistema gestor de base de dades per les següents raons:
 
@@ -14,7 +14,7 @@ No s'ha utilitzat RDS d'AWS perquè té un cost elevat. La base de dades s'ha de
 
 ---
 
-## 3.2 Diagrama Entitat-Relació
+## 8.2 Diagrama Entitat-Relació
 
 El diagrama E/R representa les 18 entitats de la base de dades d'InnovateTech, les seves relacions i cardinalitats. Les entitats s'han agrupat per colors segons la seva funció: blau per al personal, verd per als usuaris i clients, taronja per a les comunicacions, vermell per al comerç, gris per a l'auditoria i morat per als continguts multimèdia.
 
@@ -22,7 +22,7 @@ El diagrama E/R representa les 18 entitats de la base de dades d'InnovateTech, l
 
 ---
 
-## 3.3 Model Relacional i descripció de les taules
+## 8.3 Model Relacional i descripció de les taules
 
 A partir del diagrama E/R s'ha obtingut el següent esquema relacional. Les claus primàries estan **subratllades** i les claus foranes s'indiquen amb `→`:
 
@@ -82,7 +82,7 @@ Registra cada execució del backup automàtic: quan s'ha executat, quines taules
 
 ---
 
-## 3.4 Creació de les taules i inserció de dades
+## 8.4 Creació de les taules i inserció de dades
 
 Les taules s'han creat seguint l'ordre correcte per respectar les dependències entre claus foranes, començant per les taules sense FKs i acabant per les que en depenen. S'han aplicat les restriccions adequades: `PRIMARY KEY`, `FOREIGN KEY`, `NOT NULL`, `UNIQUE` i `CHECK`.
 A continuació es mostra la taula `Trucades` com a exemple, per ser la més complexa amb quatre claus foranes i la lògica de destí nullable:
@@ -143,7 +143,7 @@ S'ha implementat un script Bash ([`amplebanda.sh`](../scripts/amplebanda.sh)) qu
 
 ---
 
-## 3.5 Rols i permisos
+## 8.5 Rols i permisos
 
 ### Rols demanats per l'enunciat
 
@@ -178,7 +178,7 @@ GRANT SELECT, INSERT, UPDATE ON innovatetech.Trucades TO 'vendes';
 
 ---
 
-## 3.6 Script de creació automatitzada d'usuaris
+## 8.6 Script de creació automatitzada d'usuaris
 
 S'ha creat un script en Bash ([`scriptusuaris.sh`](../scripts/scriptusuaris.sh)) que automatitza la creació d'usuaris a la base de dades amb les següents funcionalitats:
 
@@ -215,7 +215,7 @@ FLUSH PRIVILEGES;
 
 ---
 
-## 3.7 Triggers i comprovacions
+## 8.7 Triggers i comprovacions
 
 S'han implementat cinc triggers per garantir la seguretat i el control d'accés. Tots els triggers que bloquegen operacions registren prèviament l'intent a la taula `Avisos` (motor MyISAM) abans de llançar l'error, garantint que el registre d'auditoria no es perdi mai.
 
@@ -365,7 +365,7 @@ L'script manté un fitxer de control (`last_avis_id.txt`) per recordar l'últim 
 
 ---
 
-## 3.8 Backup
+## 8.8 Backup
 
 S'ha creat un event periòdic (`evt_backup_diari`) que s'executa automàticament cada dia a les **02:00 AM**. S'ha escollit aquesta hora perquè és el moment de menor activitat del sistema, minimitzant l'impacte en el rendiment.
 
