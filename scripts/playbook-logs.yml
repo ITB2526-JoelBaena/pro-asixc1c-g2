@@ -1,1 +1,59 @@
-# playbook ansible
+---
+- name: Configurar servidor Logs InnovateTech
+  hosts: localhost
+  become: yes
+
+  tasks:
+
+    - name: Actualitzar el sistema
+      apt:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Instal·lar syslog-ng
+      apt:
+        name: syslog-ng
+        state: present
+
+    - name: Habilitar syslog-ng
+      systemd:
+        name: syslog-ng
+        enabled: yes
+        state: started
+
+    - name: Configurar syslog-ng per rebre logs
+      blockinfile:
+        path: /etc/syslog-ng/syslog-ng.conf
+        marker: "# {mark} LOGS CONFIG"
+        block: |
+          source s_network {
+              udp(ip(0.0.0.0) port(514));
+              tcp(ip(0.0.0.0) port(514));
+          };
+          destination d_remote {
+              file("/var/log/hosts/$HOST/$YEAR-$MONTH-$DAY.log"
+              create-dirs(yes));
+          };
+          log {
+              source(s_network);
+              destination(d_remote);
+          };
+
+    - name: Crear carpeta /var/log/hosts
+      file:
+        path: /var/log/hosts
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Actualitzar versió syslog-ng.conf
+      lineinfile:
+        path: /etc/syslog-ng/syslog-ng.conf
+        regexp: '^@version:'
+        line: '@version: 4.3'
+
+    - name: Reiniciar syslog-ng
+      systemd:
+        name: syslog-ng
+        state: restarted
