@@ -177,7 +177,7 @@ Demostració d'execució creant dos usuaris:
 
 ![Execució script usuaris](imatges/usuaris.png)
 
-Nota important: Els usuaris creats han de seguir la convenció de nom nomUsuari_rol (per exemple: marc_vendes, anna_administracio). Els triggers d'auditoria identifiquen el rol de l'usuari mitjançant la funció USER() de MySQL, que retorna el nom de l'usuari connectat. Si un usuari no segueix aquesta convenció, els triggers no el detectaran correctament i les operacions no autoritzades no quedaran registrades a la taula Avisos.
+**Nota important:** Els usuaris creats han de seguir la convenció de nom nomUsuari_rol (per exemple: marc_vendes, anna_administracio). Els triggers d'auditoria identifiquen el rol de l'usuari mitjançant la funció USER() de MySQL, que retorna el nom de l'usuari connectat. Si un usuari no segueix aquesta convenció, els triggers no el detectaran correctament i les operacions no autoritzades no quedaran registrades a la taula Avisos.
 
 El fitxer `usuaris_creats.sql` generat automàticament conté les sentències SQL per poder revisar i executar posteriorment:
 
