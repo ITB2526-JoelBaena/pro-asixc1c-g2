@@ -1,0 +1,27 @@
+dn: ou=usuaris,dc=innovatetech,dc=local
+objectClass: organizationalUnit
+ou: usuaris
+
+dn: ou=grups,dc=innovatetech,dc=local
+objectClass: organizationalUnit
+ou: grups
+
+dn: ou=vendes,dc=innovatetech,dc=local
+objectClass: organizationalUnit
+ou: vendes
+
+dn: ou=suport,dc=innovatetech,dc=local
+objectClass: organizationalUnit
+ou: suport
+
+dn: ou=administracio,dc=innovatetech,dc=local
+objectClass: organizationalUnit
+ou: administracio
+
+dn: ou=logistica,dc=innovatetech,dc=local
+objectClass: organizationalUnit
+ou: logistica
+
+dn: ou=direccio,dc=innovatetech,dc=local
+objectClass: organizationalUnit
+ou: direccio

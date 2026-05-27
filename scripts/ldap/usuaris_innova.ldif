@@ -1,0 +1,149 @@
+dn: uid=mnadal,ou=direccio,dc=innovatetech,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: mnadal
+sn: Nadal Vila
+givenName: Monica
+cn: Monica Nadal Vila
+uidNumber: 1001
+gidNumber: 1001
+userPassword: Aneto_3404
+loginShell: /bin/bash
+homeDirectory: /home/mnadal
+mail: mnadal@innovatetech.local
+
+dn: uid=mbatlle,ou=vendes,dc=innovatetech,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: mbatlle
+sn: Batlle Soler
+givenName: Marc
+cn: Marc Batlle Soler
+uidNumber: 1002
+gidNumber: 1002
+userPassword: Aneto_3404
+loginShell: /bin/bash
+homeDirectory: /home/mbatlle
+mail: mbatlle@innovatetech.local
+
+dn: uid=lcomes,ou=vendes,dc=innovatetech,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: lcomes
+sn: Comes Puig
+givenName: Laura
+cn: Laura Comes Puig
+uidNumber: 1003
+gidNumber: 1003
+userPassword: Aneto_3404
+loginShell: /bin/bash
+homeDirectory: /home/lcomes
+mail: lcomes@innovatetech.local
+
+dn: uid=jfont,ou=administracio,dc=innovatetech,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: jfont
+sn: Font Mas
+givenName: Jordi
+cn: Jordi Font Mas
+uidNumber: 1004
+gidNumber: 1004
+userPassword: Aneto_3404
+loginShell: /bin/bash
+homeDirectory: /home/jfont
+mail: jfont@innovatetech.local
+
+dn: uid=cgil,ou=administracio,dc=innovatetech,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: cgil
+sn: Gil Valls
+givenName: Cristina
+cn: Cristina Gil Valls
+uidNumber: 1005
+gidNumber: 1005
+userPassword: Aneto_3404
+loginShell: /bin/bash
+homeDirectory: /home/cgil
+mail: cgil@innovatetech.local
+
+dn: uid=ahuguet,ou=suport,dc=innovatetech,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: ahuguet
+sn: Huguet Roca
+givenName: Antoni
+cn: Antoni Huguet Roca
+uidNumber: 1006
+gidNumber: 1006
+userPassword: Aneto_3404
+loginShell: /bin/bash
+homeDirectory: /home/ahuguet
+mail: ahuguet@innovatetech.local
+
+dn: uid=sisern,ou=suport,dc=innovatetech,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: sisern
+sn: Isern Tort
+givenName: Silvia
+cn: Silvia Isern Tort
+uidNumber: 1007
+gidNumber: 1007
+userPassword: Aneto_3404
+loginShell: /bin/bash
+homeDirectory: /home/sisern
+mail: sisern@innovatetech.local
+
+dn: uid=pjover,ou=logistica,dc=innovatetech,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: pjover
+sn: Jover Bosch
+givenName: Pau
+cn: Pau Jover Bosch
+uidNumber: 1008
+gidNumber: 1008
+userPassword: Aneto_3404
+loginShell: /bin/bash
+homeDirectory: /home/pjover
+mail: pjover@innovatetech.local
+
+dn: uid=ellop,ou=logistica,dc=innovatetech,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: ellop
+sn: Llop Puig
+givenName: Elena
+cn: Elena Llop Puig
+uidNumber: 1009
+gidNumber: 1009
+userPassword: Aneto_3404
+loginShell: /bin/bash
+homeDirectory: /home/ellop
+mail: ellop@innovatetech.local
+
+dn: uid=rmas,ou=direccio,dc=innovatetech,dc=local
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: rmas
+sn: Mas Riera
+givenName: Ramon
+cn: Ramon Mas Riera
+uidNumber: 1010
+gidNumber: 1010
+userPassword: Aneto_3404
+loginShell: /bin/bash
+homeDirectory: /home/rmas
+mail: rmas@innovatetech.local
