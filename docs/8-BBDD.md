@@ -123,7 +123,7 @@ Verificació de les 18 taules creades correctament:
 
 ### Ampliació: Inserció automàtica de mesures d'ample de banda
 
-S'ha implementat un script Bash (`mesura_bandwidth.sh`) que executa `speedtest-cli` automàticament i insereix els resultats directament a la taula `Mesures_Bandwidth`, classificant el resultat com a acceptable o no acceptable segons uns llindars mínims definits (10 Mbps baixada, 5 Mbps pujada, latència < 100ms).
+S'ha implementat un script Bash ([`amplebanda.sh`](../scripts/amplebanda.sh)) que executa `speedtest-cli` automàticament i insereix els resultats directament a la taula `Mesures_Bandwidth`, classificant el resultat com a acceptable o no acceptable segons uns llindars mínims definits (10 Mbps baixada, 5 Mbps pujada, latència < 100ms).
 
 ![Mesura automàtica de bandwidth](../img/bbdd/mesura_amplebanda.png)
 
@@ -164,7 +164,7 @@ GRANT SELECT, INSERT, UPDATE ON innovatetech.Trucades TO 'vendes';
 
 ## 3.6 Script de creació automatitzada d'usuaris
 
-S'ha creat un script en Bash (`scriptusuaris.sh`) que automatitza la creació d'usuaris a la base de dades amb les següents funcionalitats:
+S'ha creat un script en Bash ([`scriptusuaris.sh`](../scripts/scriptusuaris.sh)) que automatitza la creació d'usuaris a la base de dades amb les següents funcionalitats:
 
 - Permet donar d'alta un o més usuaris alhora.
 - Executa les sentències `CREATE USER` i `GRANT` corresponents al rol assignat.
@@ -342,7 +342,7 @@ Comprovació — connectats amb l'usuari `test_administracio`:
 
 ### Ampliació: Notificacions automàtiques a Discord
 
-S'ha implementat un script Bash (`notificacions_discord.sh`) que revisa periòdicament la taula `Avisos` i envia una notificació al canal `#avisos-seguretat` de Discord via webhook quan detecta nous intents d'accés no autoritzat.
+S'ha implementat un script Bash ([`notificacions_discord.sh`](../scripts/notificacions_discord.sh)) que revisa periòdicament la taula `Avisos` i envia una notificació al canal `#avisos-seguretat` de Discord via webhook quan detecta nous intents d'accés no autoritzat.
 
 ![Bash Discord](../img/bbdd/bash_discord.png)
 
