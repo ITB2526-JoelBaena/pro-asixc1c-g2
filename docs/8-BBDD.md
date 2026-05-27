@@ -85,9 +85,10 @@ Registra cada execució del backup automàtic: quan s'ha executat, quines taules
 ## 3.4 Creació de les taules i inserció de dades
 
 Les taules s'han creat seguint l'ordre correcte per respectar les dependències entre claus foranes, començant per les taules sense FKs i acabant per les que en depenen. S'han aplicat les restriccions adequades: `PRIMARY KEY`, `FOREIGN KEY`, `NOT NULL`, `UNIQUE` i `CHECK`.
-([`creartaules.sql`](../sql/creartaules.sql)
-([`trigger2.sql`](../sql/insertardades.sql))
 A continuació es mostra la taula `Trucades` com a exemple, per ser la més complexa amb quatre claus foranes i la lògica de destí nullable:
+
+([`creartaules.sql`](../sql/creartaules.sql))
+([`trigger2.sql`](../sql/insertardades.sql))
 
 ```sql
 CREATE TABLE Trucades (
