@@ -2,6 +2,7 @@
 
 **Projecte:** Projecte Transversal ASIXc1 — InnovateTech  
 **Autors:** Joel Baena, Marc Balastegui, Oussama Boukhali, Alex Sampietro 
+
 **Data:** Maig 2026  
 **Regió:** us-east-1 (N. Virginia)
 
