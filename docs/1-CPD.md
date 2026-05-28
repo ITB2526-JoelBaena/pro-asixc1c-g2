@@ -1,7 +1,7 @@
 # 1. Proposta de CPD
 
-**Ubicació:** Planta baixa — Sala de Manteniment
-**Infraestructura:** CPD físic (on-premises) 
+**Ubicació:** Planta baixa — Sala de Manteniment          
+**Infraestructura:** CPD físic                 
 **Racks:** 2 racks 42U · 6 servidors Dell · NAS Synology · SAI APC 3000VA
 
 ---
