@@ -123,6 +123,10 @@ Recull els logs de tots els servidors del CPD mitjançant Syslog-ng. Disposa de 
 
 Emmagatzematge centralitzat en RAID 5 (12 TB útils de 16 TB bruts). Guarda els backups diaris, setmanals i mensuals de tots els servidors, i les gravacions de les càmeres de seguretat. No executa cap servei de producció, únicament actua com a magatzem de dades.
 
+### Diagrama de racks
+
+![Diagrama de racks](../img/cpd/cpd)
+
 ---
 
 ## 1.5 Infraestructura elèctrica i SAI
@@ -255,6 +259,7 @@ L'emmagatzematge de totes les còpies de seguretat recau íntegrament sobre el N
 
 ---
 
+
 ## Plànols sala CPD
 
 ### Vista de planta
@@ -266,6 +271,3 @@ L'emmagatzematge de totes les còpies de seguretat recau íntegrament sobre el N
 ![Plànol perfil](../img/cpd/perfil)
 
 
-### Diagrama de racks
-
-![Diagrama de racks](../img/cpd/cpd)
