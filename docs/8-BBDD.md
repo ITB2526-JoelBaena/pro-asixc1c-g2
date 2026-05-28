@@ -233,11 +233,11 @@ El script sap gestionar errors (usuari ja existent, número d'usuaris invàlid, 
 
 ![Execució script error_usuaris](../img/bbdd/usuaris_error.png)
 
-El fitxer ([`scriptusuaris.sh`]../scripts/scriptusuaris.sh) generat automàticament conté les sentències SQL per poder revisar i executar posteriorment:
+El fitxer ([`scriptusuaris.sh`](../scripts/scriptusuaris.sh)) generat automàticament conté les sentències SQL per poder revisar i executar posteriorment:
 
 ![Usuaris_creats](../img/bbdd/usuaris_creats.png)
 
-**Nota:** No surt l'usuari marc_vendes al fitxer usuaris_creats.sql perque es va crear abans de que existís el script
+**Nota:** No surt l'usuari marc_vendes al fitxer `usuaris_creats.sql` perque es va crear abans de que existís el script
 
 [↑ Tornar a l'índex](#index)
 
