@@ -7,7 +7,8 @@
 **Centre:** Institut Tecnològic de Barcelona  
 **Curs:** 2025–2026  
 **Període del projecte:** 18/05/2026 → 28/05/2026  
-**Defensa:** 29/05/2026
+**Defensa:** 29/05/2026                                
+**Vídeo del projecte:** [Veure el vídeo](https://drive.google.com/file/d/1zjPNvcIJbIKt3xYTo4rLhL92JJLA5kcB/view?usp=vids_web)
 
 ---
 
