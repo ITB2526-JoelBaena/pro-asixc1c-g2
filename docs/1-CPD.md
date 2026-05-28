@@ -259,7 +259,7 @@ L'emmagatzematge de totes les còpies de seguretat recau íntegrament sobre el N
 
 ### Vista de planta
 
-![Plànol vista de planta](../img/cpd/perfil)
+![Plànol vista de planta](../img/cpd/Sala)
 
 ### Perfil
 
