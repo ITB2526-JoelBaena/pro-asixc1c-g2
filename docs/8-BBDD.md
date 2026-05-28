@@ -113,7 +113,7 @@ Registra cada execució del backup automàtic: quan s'ha executat, quines taules
 ## 8.4 Creació de les taules i inserció de dades
 
 Les taules s'han creat seguint l'ordre correcte per respectar les dependències entre claus foranes, començant per les taules sense FKs i acabant per les que en depenen. S'han aplicat les restriccions adequades: `PRIMARY KEY`, `FOREIGN KEY`, `NOT NULL`, `UNIQUE` i `CHECK`.
-A continuació es mostra la taula `Trucades` com a exemple, per ser la més complexa amb quatre claus foranes i la lògica de destí nullable:
+A continuació es mostra la taula `Trucades` com a exemple, per ser la més complexa amb quatre claus foranes i la lògica de destí nullable (vol dir que el camp pot estar buit, però la lògica garanteix que mai els dos estaran buits alhora. Ja que una trucada pot tenir 2 destinataris diferents, client o usuari, per tant una pot estar buida pero no les 2 alhora)
 
 ([`creartaules.sql`](../sql/creartaules.sql))
 ([`insertardades.sql`](../sql/insertardades.sql))
