@@ -1,5 +1,27 @@
 # 8. Disseny i implementació d'una base de dades
 
+**Servidor:** `bbdd-innovatetech` — `10.0.1.40`  
+**IP elàstica:** `44.223.229.27`  
+**Software:** MySQL 8.0  
+**Port:** 3306
+
+---
+
+<a name="index"></a>
+## Índex
+
+- [8.1 Justificació del SGBD escollit](#81-justificació-del-sgbd-escollit)
+- [8.2 Diagrama Entitat-Relació](#82-diagrama-entitat-relació)
+- [8.3 Model Relacional i descripció de les taules](#83-model-relacional-i-descripció-de-les-taules)
+- [8.4 Creació de les taules i inserció de dades](#84-creació-de-les-taules-i-inserció-de-dades)
+- [8.5 Rols i permisos](#85-rols-i-permisos)
+- [8.6 Script de creació automatitzada d'usuaris](#86-script-de-creació-automatitzada-dusuaris)
+- [8.7 Triggers i comprovacions](#87-triggers-i-comprovacions)
+- [8.8 Backup](#88-backup)
+
+---
+
+
 ## 8.1 Justificació del SGBD escollit
 
 S'ha escollit **MySQL 8.0** com a sistema gestor de base de dades per les següents raons:
@@ -12,16 +34,20 @@ S'ha escollit **MySQL 8.0** com a sistema gestor de base de dades per les següe
 
 No s'ha utilitzat RDS d'AWS perquè té un cost elevat. La base de dades s'ha desplegat sobre una instància EC2 amb Ubuntu 24.04.
 
----
 
+[↑ Tornar a l'índex](#index)
+
+---
 ## 8.2 Diagrama Entitat-Relació
 
 El diagrama E/R representa les 18 entitats de la base de dades d'InnovateTech, les seves relacions i cardinalitats. Les entitats s'han agrupat per colors segons la seva funció: blau per al personal, verd per als usuaris i clients, taronja per a les comunicacions, vermell per al comerç, gris per a l'auditoria i morat per als continguts multimèdia.
 
 ![Diagrama E/R](../img/bbdd/diagramaBBDD.png)
 
----
 
+[↑ Tornar a l'índex](#index)
+
+---
 ## 8.3 Model Relacional i descripció de les taules
 
 A partir del diagrama E/R s'ha obtingut el següent esquema relacional. Les claus primàries estan **subratllades** i les claus foranes s'indiquen amb `→`:
@@ -80,8 +106,10 @@ Taula d'auditoria que registra tots els intents d'accés no autoritzat. Utilitza
 **Backup_Log** (<u>id_backup</u>, data_hora, taules_incloses, resultat)
 Registra cada execució del backup automàtic: quan s'ha executat, quines taules s'han inclòs i si ha tingut èxit.
 
----
 
+[↑ Tornar a l'índex](#index)
+
+---
 ## 8.4 Creació de les taules i inserció de dades
 
 Les taules s'han creat seguint l'ordre correcte per respectar les dependències entre claus foranes, començant per les taules sense FKs i acabant per les que en depenen. S'han aplicat les restriccions adequades: `PRIMARY KEY`, `FOREIGN KEY`, `NOT NULL`, `UNIQUE` i `CHECK`.
@@ -141,8 +169,10 @@ S'ha implementat un script Bash ([`amplebanda.sh`](../scripts/amplebanda.sh)) qu
 
 ![Mesura automàtica de bandwidth](../img/bbdd/mesura_amplebanda.png)
 
----
 
+[↑ Tornar a l'índex](#index)
+
+---
 ## 8.5 Rols i permisos
 
 ### Rols demanats per l'enunciat
@@ -176,8 +206,10 @@ GRANT SELECT, INSERT, UPDATE ON innovatetech.Trucades TO 'vendes';
 
 ![Verificació SHOW GRANTS](../img/bbdd/grants.png)
 
----
 
+[↑ Tornar a l'índex](#index)
+
+---
 ## 8.6 Script de creació automatitzada d'usuaris
 
 S'ha creat un script en Bash ([`scriptusuaris.sh`](../scripts/scriptusuaris.sh)) que automatitza la creació d'usuaris a la base de dades amb les següents funcionalitats:
@@ -199,12 +231,15 @@ El script sap gestionar errors (usuari ja existent, número d'usuaris invàlid, 
 
 ![Execució script error_usuaris](../img/bbdd/usuaris_error.png)
 
-El fitxer ([`scriptusuaris.sh`](../scripts/scriptusuaris.sh)) generat automàticament conté les sentències SQL per poder revisar i executar posteriorment:
+El fitxer ([`scriptusuaris.sh`]../scripts/scriptusuaris.sh) generat automàticament conté les sentències SQL per poder revisar i executar posteriorment:
 
 ![Usuaris_creats](../img/bbdd/usuaris_creats.png)
 
-**Nota:** No surt l'usuari marc_vendes al fitxer `usuaris_creats.sql` perque es va crear abans de que existís el script
+**Nota:** No surt l'usuari marc_vendes al fitxer usuaris_creats.sql perque es va crear abans de que existís el script
 
+[↑ Tornar a l'índex](#index)
+
+---
 ## 8.7 Triggers i comprovacions
 
 S'han implementat cinc triggers per garantir la seguretat i el control d'accés. Tots els triggers que bloquegen operacions registren prèviament l'intent a la taula `Avisos` (motor MyISAM) abans de llançar l'error, garantint que el registre d'auditoria no es perdi mai.
@@ -353,8 +388,10 @@ L'script manté un fitxer de control (`last_avis_id.txt`) per recordar l'últim 
 
 ![Notificació Discord](../img/bbdd/discord.png)
 
----
 
+[↑ Tornar a l'índex](#index)
+
+---
 ## 8.8 Backup
 
 S'ha creat un event periòdic (`evt_backup_diari`) que s'executa automàticament cada dia a les **02:00 AM**. S'ha escollit aquesta hora perquè és el moment de menor activitat del sistema, minimitzant l'impacte en el rendiment.
@@ -409,3 +446,5 @@ Verificació de l'event actiu i registre a `Backup_Log`:
 
 
 **Nota:** El event backup es recurrent, es realitza a les 2:00 AM. Però per fer la comprovació hem canviat el event per a que es faci una vegada ara mateix.
+
+[↑ Tornar a l'índex](#index)
