@@ -389,6 +389,9 @@ L'script manté un fitxer de control (`last_avis_id.txt`) per recordar l'últim 
 
 ![Notificació Discord](../img/bbdd/discord.png)
 
+Com que executar el script tota la estona per a que s'enviïn els avisos seria tediós i incoherent (No hi hauria automatització), hem afegit un Cron Job per a que s'executi cada 5 minuts, així el retard màxim desde que hi ha un avís fins que arriba al servidor es mínim.
+
+![Crontab Discord](../img/bbdd/cron.png)
 
 [↑ Tornar a l'índex](#index)
 
