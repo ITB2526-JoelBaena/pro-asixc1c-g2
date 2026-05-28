@@ -1,10 +1,42 @@
 # 7. Servei de vídeo i videoconferència
 
+**Servidor:** `video-innovatetech` — `10.0.1.60`  
+**IP elàstica:** `3.214.188.132`  
+**Software:** NGINX + mòdul RTMP + Jitsi Meet  
+**Protocols:** RTMP, HLS, WebRTC
+
+---
+
+<a name="index"></a>
+## Índex
+
+- [7.1 Servei de vídeo](#71-servei-de-vídeo)
+  - [7.1.1 Descripció del servei](#711-descripció-del-servei)
+  - [7.1.2 Tecnologia escollida](#712-tecnologia-escollida-nginx-amb-mòdul-rtmp)
+  - [7.1.3 Formats i còdecs](#713-formats-i-còdecs-utilitzats)
+  - [7.1.4 Protocols utilitzats](#714-protocols-utilitzats)
+  - [7.1.5 Instal·lació i configuració](#715-installació-i-configuració)
+  - [7.1.6 Comprovació del servei](#716-comprovació-del-servei)
+- [7.2 Servei de videoconferència](#72-servei-de-videoconferència)
+  - [7.2.1 Descripció del servei](#721-descripció-del-servei)
+  - [7.2.2 Tecnologia escollida](#722-tecnologia-escollida-jitsi-meet)
+  - [7.2.3 Protocol WebRTC](#723-protocol-utilitzat-webrtc)
+  - [7.2.4 Components de Jitsi Meet](#724-components-de-jitsi-meet)
+  - [7.2.5 Instal·lació i configuració](#725-installació-i-configuració)
+  - [7.2.6 Comprovació del servei](#726-comprovació-del-servei)
+- [7.3 Incidències i solucions](#73-incidències-i-solucions)
+
+---
+
 ## 7.1 Servei de vídeo
 
 ### 7.1.1 Descripció del servei
 
 El servei de vídeo permet la distribució de contingut audiovisual en temps real (streaming en directe) i sota demanda (fitxers MP4). NGINX converteix el stream RTMP a HLS, compatible amb qualsevol navegador modern sense necessitat de programari addicional.
+
+[↑ Tornar a l'índex](#index)
+
+---
 
 ### 7.1.2 Tecnologia escollida: NGINX amb mòdul RTMP
 
@@ -16,6 +48,10 @@ S'ha escollit **NGINX amb el mòdul RTMP** per les raons següents:
 - Lleuger i eficient en consum de recursos.
 - Estàndard en entorns empresarials.
 
+[↑ Tornar a l'índex](#index)
+
+---
+
 ### 7.1.3 Formats i còdecs utilitzats
 
 | Format | Còdec | Ús |
@@ -26,11 +62,19 @@ S'ha escollit **NGINX amb el mòdul RTMP** per les raons següents:
 
 S'ha escollit **H.264** com a còdec principal per la seva compatibilitat universal amb navegadors, dispositius mòbils i reproductors de vídeo.
 
+[↑ Tornar a l'índex](#index)
+
+---
+
 ### 7.1.4 Protocols utilitzats
 
 **RTMP (Real-Time Messaging Protocol):** Protocol usat per enviar el stream de vídeo des de ffmpeg cap al servidor NGINX. Funciona pel port 1935 i és el protocol estàndard per a la publicació de streams en entorns professionals.
 
 **HLS (HTTP Live Streaming):** Protocol usat per distribuir el vídeo als clients. NGINX converteix automàticament el stream RTMP a HLS. El client rep fragments de vídeo de curta durada (`.ts`) i una llista de reproducció (`.m3u8`). Funciona pel port 8080 i és compatible amb qualsevol navegador modern.
+
+[↑ Tornar a l'índex](#index)
+
+---
 
 ### 7.1.5 Instal·lació i configuració
 
@@ -114,6 +158,10 @@ ffmpeg -re -stream_loop -1 -i /home/admintech_video/videos/prova.mp4 \
   -c copy -f flv rtmp://localhost:1935/live/stream > /dev/null 2>&1 &
 ```
 
+[↑ Tornar a l'índex](#index)
+
+---
+
 ### 7.1.6 Comprovació del servei
 
 **Verificació de l'estat:**
@@ -122,14 +170,16 @@ sudo systemctl status nginx
 ```
 
 **Accés als serveis:**
-- Vídeo sota demanda: `http://IP_SERVIDOR:8080/videos/prova.mp4`
-- Stream HLS: `http://IP_SERVIDOR:8080/hls/stream.m3u8`
+- Vídeo sota demanda: `http://3.214.188.132:8080/videos/prova.mp4`
+- Stream HLS: `http://3.214.188.132:8080/hls/stream.m3u8`
 
-![Vídeo prova.mp4 reproduint-se al navegador](../img/audio-video/captura19.png)
+> ![Vídeo prova.mp4 reproduint-se al navegador](../img/audio-video/captura19.png)
 
-![Stream HLS reproduint-se al VLC](../img/audio-video/captura20.png)
+> ![Stream HLS reproduint-se al VLC](../img/audio-video/captura20.png)
 
 > **Validació:** Vídeo accessible des del navegador web i des de VLC mitjançant el protocol HLS.
+
+[↑ Tornar a l'índex](#index)
 
 ---
 
@@ -138,6 +188,10 @@ sudo systemctl status nginx
 ### 7.2.1 Descripció del servei
 
 El servei de videoconferència permet la comunicació en temps real entre múltiples usuaris mitjançant àudio i vídeo. Està orientat a la comunicació interna d'InnovateTech i a sessions de formació corporativa.
+
+[↑ Tornar a l'índex](#index)
+
+---
 
 ### 7.2.2 Tecnologia escollida: Jitsi Meet
 
@@ -149,6 +203,10 @@ S'ha escollit **Jitsi Meet** per les raons següents:
 - Inclou funcionalitats corporatives: compartir pantalla, xat, gravació.
 - Solució de videoconferència autogestionada més estesa en entorns empresarials.
 
+[↑ Tornar a l'índex](#index)
+
+---
+
 ### 7.2.3 Protocol utilitzat: WebRTC
 
 **WebRTC (Web Real-Time Communication)** és el protocol que usa Jitsi Meet per transmetre àudio i vídeo entre els participants:
@@ -158,6 +216,10 @@ S'ha escollit **Jitsi Meet** per les raons següents:
 - Adaptació automàtica de la qualitat segons l'amplada de banda disponible.
 - Funciona sobre UDP (port 10000) per minimitzar la latència.
 
+[↑ Tornar a l'índex](#index)
+
+---
+
 ### 7.2.4 Components de Jitsi Meet
 
 | Component | Funció |
@@ -166,6 +228,10 @@ S'ha escollit **Jitsi Meet** per les raons següents:
 | **Jicofo** | Gestor de conferències (focus) |
 | **Jitsi Videobridge (JVB)** | Servidor de vídeo WebRTC |
 | **Prosody** | Servidor XMPP per a la senyalització |
+
+[↑ Tornar a l'índex](#index)
+
+---
 
 ### 7.2.5 Instal·lació i configuració
 
@@ -224,6 +290,10 @@ sudo apt-get install -y jitsi-meet
 include /etc/nginx/sites-enabled/*.conf;
 ```
 
+[↑ Tornar a l'índex](#index)
+
+---
+
 ### 7.2.6 Comprovació del servei
 
 **Verificació de l'estat de tots els components:**
@@ -243,11 +313,13 @@ sudo systemctl status nginx
 | 8080 | NGINX vídeo | TCP |
 | 10000 | Jitsi Videobridge | UDP |
 
-**Accés al servei:** `https://IP_SERVIDOR`
+**Accés al servei:** `https://3.214.188.132`
 
-![Dues connexions simultànies a la sala Innovatetech de Jitsi Meet](../img/audio-video/captura25.png)
+> ![Dues connexions simultànies a la sala Innovatetech de Jitsi Meet](../img/audio-video/captura25.png)
 
 > **Validació:** Dos usuaris (`usuari1` i `usuari2`) connectats simultàniament a la mateixa sala de videoconferència `Innovatetech`.
+
+[↑ Tornar a l'índex](#index)
 
 ---
 
@@ -259,3 +331,5 @@ sudo systemctl status nginx
 | Jitsi no escoltava al port 443 | El `nginx.conf` no incloïa el directori `sites-enabled` | Afegir `include /etc/nginx/sites-enabled/*.conf;` al bloc `http` |
 | Prosody fallava sense VirtualHost | Fitxer de configuració sense cap `VirtualHost` definit | Afegir `VirtualHost "localhost"` al fitxer de configuració |
 | Fitxers HLS no es generaven | Permisos incorrectes al directori `/tmp/hls` | Executar `sudo chmod 777 /tmp/hls` |
+
+[↑ Tornar a l'índex](#index)
