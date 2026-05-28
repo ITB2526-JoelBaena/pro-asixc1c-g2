@@ -263,7 +263,7 @@ L'emmagatzematge de totes les còpies de seguretat recau íntegrament sobre el N
 
 ### Perfil
 
-![Plànol perfil](../img/cpd/cpd)
+![Plànol perfil](../img/cpd/perfil)
 
 
 ### Diagrama de racks
