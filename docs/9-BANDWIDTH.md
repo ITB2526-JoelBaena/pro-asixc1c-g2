@@ -1,8 +1,28 @@
 # 9. Comprovacions d'amplada de banda
 
+**Màquines provades:** `audio-innovatetech` (`10.0.1.50`) i `video-innovatetech` (`10.0.1.60`)  
+**Eina:** speedtest-cli  
+**Data:** Maig 2026
+
+---
+
+<a name="index"></a>
+## Índex
+
+- [9.1 Objectiu](#91-objectiu)
+- [9.2 Metodologia](#92-metodologia)
+- [9.3 Resultats de les proves](#93-resultats-de-les-proves)
+- [9.4 Anàlisi dels resultats](#94-anàlisi-dels-resultats)
+- [9.5 Classificació del sistema](#95-classificació-del-sistema)
+- [9.6 Conclusió tècnica](#96-conclusió-tècnica)
+
+---
+
 ## 9.1 Objectiu
 
 Garantir que la infraestructura desplegada és capaç de suportar els serveis d'àudio, vídeo i videoconferència sense degradació del servei. Les proves es realitzen des de cada màquina AWS per mesurar la capacitat real de la infraestructura.
+
+[↑ Tornar a l'índex](#index)
 
 ---
 
@@ -16,6 +36,8 @@ sudo apt-get install -y speedtest-cli
 speedtest-cli
 ```
 
+[↑ Tornar a l'índex](#index)
+
 ---
 
 ## 9.3 Resultats de les proves
@@ -24,7 +46,7 @@ speedtest-cli
 
 Prova realitzada amb el servei Icecast2 en funcionament i Liquidsoap reproduint el stream de música corporativa.
 
-![Resultats speedtest màquina àudio](../img/audio-video/captura26.png)
+> ![Resultats speedtest màquina àudio](../img/audio-video/captura26.png)
 
 | Mesura | Resultat |
 |--------|----------|
@@ -37,7 +59,7 @@ Prova realitzada amb el servei Icecast2 en funcionament i Liquidsoap reproduint 
 
 Prova realitzada amb el servei NGINX en funcionament, el vídeo `prova.mp4` reproduint-se al navegador i Jitsi Meet actiu.
 
-![Resultats speedtest màquina vídeo](../img/audio-video/captura27.png)
+> ![Resultats speedtest màquina vídeo](../img/audio-video/captura27.png)
 
 | Mesura | Resultat |
 |--------|----------|
@@ -45,6 +67,8 @@ Prova realitzada amb el servei NGINX en funcionament, el vídeo `prova.mp4` repr
 | Latència | 2.912 ms |
 | Download | 1004.46 Mbit/s |
 | Upload | 1008.49 Mbit/s |
+
+[↑ Tornar a l'índex](#index)
 
 ---
 
@@ -66,6 +90,8 @@ Amb els resultats obtinguts, la infraestructura pot suportar simultàniament:
 - **Vídeo:** fins a ~1000 clients reproduint vídeo HLS a 360p
 - **Videoconferència:** fins a ~670 participants simultanis en videoconferències WebRTC
 
+[↑ Tornar a l'índex](#index)
+
 ---
 
 ## 9.5 Classificació del sistema
@@ -77,6 +103,8 @@ Amb els resultats obtinguts, la infraestructura pot suportar simultàniament:
 | Upload | > 1000 Mbps | ✅ Excel·lent |
 | **Sistema global** | | ✅ **Acceptable** |
 
+[↑ Tornar a l'índex](#index)
+
 ---
 
 ## 9.6 Conclusió tècnica
@@ -84,3 +112,5 @@ Amb els resultats obtinguts, la infraestructura pot suportar simultàniament:
 La infraestructura AWS desplegada ofereix una amplada de banda molt superior als requisits mínims de tots els serveis multimèdia implementats. Amb més d'**1 Gbps** tant de baixada com de pujada i una latència inferior a **3 ms**, la infraestructura és completament adequada per donar suport als serveis d'àudio, vídeo i videoconferència d'InnovateTech, fins i tot amb un nombre elevat d'usuaris simultanis.
 
 Les instàncies EC2 d'AWS ubicades a la regió `us-east-1` garanteixen una connectivitat òptima i uns temps de resposta molt baixos, cosa que assegura una experiència d'usuari de qualitat sense degradació del servei.
+
+[↑ Tornar a l'índex](#index)
