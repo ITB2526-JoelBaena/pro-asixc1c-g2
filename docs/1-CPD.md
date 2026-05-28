@@ -268,4 +268,4 @@ L'emmagatzematge de totes les còpies de seguretat recau íntegrament sobre el N
 
 ### Diagrama de racks
 
-![Diagrama de racks](../img/cpd/racks.png)
+![Diagrama de racks](../img/cpd/cpd)
