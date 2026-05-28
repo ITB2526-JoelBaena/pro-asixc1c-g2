@@ -96,7 +96,7 @@ El Rack 2 allotja els 6 servidors de producció que donen servei a tota la infra
 | Posició (U) | Equipament |
 |---|---|
 | 1 | Servidor S1: Dell PowerEdge R350 (1U) — Directori actiu (OpenLDAP) |
-| 2 | Servidor S2: Dell PowerEdge R350 (1U) — Base de dades (MariaDB) |
+| 2 | Servidor S2: Dell PowerEdge R350 (1U) — Base de dades (MySQL) |
 | 3 | Servidor S3: Dell PowerEdge R550 (1U) — Streaming de vídeo + Jitsi Meet |
 | 4 | Servidor S4: Dell PowerEdge R350 (1U) — Streaming d'àudio (Icecast2) |
 | 5 | Servidor S5: Dell PowerEdge R350 (1U) — Servei web (Apache2) + SFTP |
@@ -112,7 +112,7 @@ S3 (Vídeo + Jitsi) utilitza un model Dell PowerEdge R550 de major potència per
 |  | Model | CPU | RAM | Disc | Funció |
 |---|---|---|---|---|---|
 | **S1** | Dell PowerEdge R350 | Xeon E-2336 (6C) | 32 GB ECC | 2× 960 GB SSD RAID 1 | Directori actiu (OpenLDAP) |
-| **S2** | Dell PowerEdge R350 | Xeon E-2336 (6C) | 32 GB ECC | 2× 960 GB SSD RAID 1 | Base de dades (MariaDB) |
+| **S2** | Dell PowerEdge R350 | Xeon E-2336 (6C) | 32 GB ECC | 2× 960 GB SSD RAID 1 | Base de dades (MySQL) |
 | **S3** | Dell PowerEdge R550 | Xeon Silver 4310 (12C) | 64 GB ECC | 2× 960 GB SSD RAID 1 | Streaming vídeo + Jitsi Meet |
 | **S4** | Dell PowerEdge R350 | Xeon E-2336 (6C) | 32 GB ECC | 2× 960 GB SSD RAID 1 | Streaming àudio (Icecast2) |
 | **S5** | Dell PowerEdge R350 | Xeon E-2336 (6C) | 32 GB ECC | 2× 960 GB SSD RAID 1 | Servidor web (Apache2) + SFTP |
@@ -125,7 +125,7 @@ S3 (Vídeo + Jitsi) utilitza un model Dell PowerEdge R550 de major potència per
 
 Centralitza la gestió d'usuaris i permisos de tota la infraestructura. Els servidors S5 (Web/SFTP) i S2 (BBDD) s'autentiquen contra S1, de manera que un sol compte d'usuari dona accés a tots els serveis. Utilitza LDAP per a la consulta i LDAPS (port 636) per a les connexions xifrades.
 
-#### S2 — Base de dades (MariaDB)
+#### S2 — Base de dades (MySQL)
 
 Allotja la base de dades corporativa que gestiona empleats, clients i l'activitat dels serveis. Únicament accessible des del servidor web S5. Es fan còpies de seguretat nocturnes al NAS.
 
@@ -284,7 +284,7 @@ L'emmagatzematge de totes les còpies de seguretat recau íntegrament sobre el N
 | Servei | Servidor | Justificació |
 |---|---|---|
 | Directori actiu (OpenLDAP) | S1 | Centralitza usuaris i permisos. Usat per Web, SFTP i BBDD. |
-| Base de dades (MariaDB) | S2 | Gestió de dades corporatives. Backup nocturn al NAS. |
+| Base de dades (MySQL) | S2 | Gestió de dades corporatives. Backup nocturn al NAS. |
 | Streaming vídeo + Jitsi | S3 | Distribució de vídeo i videoconferència corporativa. Servidor de major potència per gestionar la càrrega multimèdia. |
 | Streaming àudio (Icecast2) | S4 | Distribució d'àudio en streaming. Servei independent per garantir la qualitat. |
 | Web (Apache2) + SFTP | S5 | Servidor web corporatiu i transferència segura de fitxers. SFTP autenticat via OpenLDAP (S1). |
