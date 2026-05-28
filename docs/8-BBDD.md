@@ -189,11 +189,15 @@ S'ha creat un script en Bash ([`scriptusuaris.sh`](../scripts/scriptusuaris.sh))
 - Gestiona errors: usuari ja existent, rol no vàlid.
 - Assigna `GRANT FILE` per permetre operacions de backup.
 
-Demostració d'execució creant dos usuaris:
+Demostració d'execució creant un usuari:
 
 ![Execució script usuaris](../img/bbdd/usuaris.png)
 
 **Nota important:** Els usuaris creats han de seguir la convenció de nom nomUsuari_rol (per exemple: marc_vendes, anna_administracio). Els triggers d'auditoria identifiquen el rol de l'usuari mitjançant la funció USER() de MySQL, que retorna el nom de l'usuari connectat. Si un usuari no segueix aquesta convenció, els triggers no el detectaran correctament i les operacions no autoritzades no quedaran registrades a la taula Avisos.
+
+El script sap gestionar errors (usuari ja existent, número d'usuaris invàlid, rol invalid...):
+
+![Execució script error_usuaris](../img/bbdd/usuaris_error.png)
 
 El fitxer `usuaris_creats.sql` generat automàticament conté les sentències SQL per poder revisar i executar posteriorment:
 
