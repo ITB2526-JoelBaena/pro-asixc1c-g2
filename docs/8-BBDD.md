@@ -203,7 +203,7 @@ El fitxer ([`scriptusuaris.sh`](../scripts/scriptusuaris.sh)) generat automàtic
 
 ![Usuaris_creats](../img/bbdd/usuaris_creats.png)
 
-**Nota:** No surt l'usuari marc_vendes al fitxer ([`scriptusuaris.sh`](../scripts/scriptusuaris.sh)) perque es va crear abans de que existís el script
+**Nota:** No surt l'usuari marc_vendes al fitxer `usuaris_creats.sql` perque es va crear abans de que existís el script
 
 ## 8.7 Triggers i comprovacions
 
