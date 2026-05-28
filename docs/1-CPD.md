@@ -151,7 +151,7 @@ Emmagatzematge centralitzat en RAID 5 (12 TB útils de 16 TB bruts). Guarda els 
 
 ### Diagrama de racks
 
-![Diagrama de racks](../img/cpd/cpd)
+![Diagrama de racks](../img/cpd/cpd.png)
 
 [↑ Tornar a l'índex](#index)
 
@@ -299,11 +299,11 @@ L'emmagatzematge de totes les còpies de seguretat recau íntegrament sobre el N
 
 ### Vista de planta
 
-![Plànol vista de planta](../img/cpd/Sala)
+![Plànol vista de planta](../img/cpd/sala.png)
 
 ### Perfil
 
-![Plànol perfil](../img/cpd/perfil)
+![Plànol perfil](../img/cpd/perfil.png)
 
 
 
