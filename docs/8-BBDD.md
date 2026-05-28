@@ -30,7 +30,6 @@ S'ha escollit **MySQL 8.0** com a sistema gestor de base de dades per les següe
 - Suport natiu de rols a partir de la versió 8.0, necessari per implementar el control d'accés demanat per l'enunciat.
 - Triggers, events periòdics i `SELECT INTO OUTFILE` per a backups funcionen directament sense configuració addicional.
 - `GRANT FILE` disponible per permetre operacions d'escriptura de fitxers des del SGBD.
-- Àmplia documentació oficial i comunitat de suport, facilitant la resolució d'incidències.
 
 No s'ha utilitzat RDS d'AWS perquè té un cost elevat. La base de dades s'ha desplegat sobre una instància EC2 amb Ubuntu 24.04.
 
