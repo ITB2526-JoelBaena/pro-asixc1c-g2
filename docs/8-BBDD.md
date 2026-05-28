@@ -203,6 +203,7 @@ El fitxer `usuaris_creats.sql` generat automàticament conté les sentències SQ
 
 ![Usuaris_creats](../img/bbdd/usuaris_creats.png)
 
+**Nota:**No surt l'usuari marc_vendes al fitxer usuaris_creats.sql perque es va crear abans de que existís el script
 
 ## 8.7 Triggers i comprovacions
 
