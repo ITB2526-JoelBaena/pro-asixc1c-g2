@@ -1,9 +1,9 @@
 # 2. Infraestructura AWS
 
-**Projecte:** Projecte Transversal ASIXc1 — InnovateTech  
-**Autors:** Joel Baena, Marc Balastegui, Oussama Boukhali, Alex Sampietro                      
-**Data:** Maig 2026  
-**Regió:** us-east-1 (N. Virginia)
+**Regió:** `us-east-1` (N. Virginia)  
+**VPC:** `vpc-innovateTech` — `10.0.0.0/16`  
+**Subxarxa:** `subred-innovateTech-publica` — `10.0.1.0/24`  
+**Instàncies:** 6 × EC2 t2.micro Ubuntu 24.04 LTS
 
 ---
 
