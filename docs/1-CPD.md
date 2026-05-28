@@ -1,9 +1,31 @@
-# cpd
 # 1. Proposta de CPD
+
+**Ubicació:** Planta baixa — Sala de Manteniment
+**Infraestructura:** CPD físic (on-premises) 
+**Racks:** 2 racks 42U · 6 servidors Dell · NAS Synology · SAI APC 3000VA
+
+---
+
+<a name="index"></a>
+## Índex
+
+- [1.1 Descripció de l'empresa](#11-descripció-de-lempresa)
+- [1.2 Ubicació física del CPD](#12-ubicació-física-del-cpd)
+- [1.3 Sistemes de climatització](#13-sistemes-de-climatització)
+- [1.4 Infraestructura IT — Racks i servidors](#14-infraestructura-it--racks-i-servidors)
+- [1.5 Infraestructura elèctrica i SAI](#15-infraestructura-elèctrica-i-sai)
+- [1.6 Seguretat física](#16-seguretat-física)
+- [1.7 Seguretat lògica](#17-seguretat-lògica)
+- [1.8 Distribució de serveis](#18-distribució-de-serveis)
+- [Plànols sala CPD](#plànols-sala-cpd)
+
+---
 
 ## 1.1 Descripció de l'empresa
 
 InnovateTech és una empresa petita (entre 10 i 50 empleats) dedicada a la provisió de serveis tecnològics, amb una activitat creixent de vendes en línia i una demanda de suport tècnic als seus clients. L'empresa disposa de 3 departaments: Vendes, Suport Tècnic i Administració. Per gestionar tot això, necessitem una base tecnològica que integri la gestió del personal amb serveis multimèdia avançats: distribució d'àudio i vídeo en streaming i un sistema de base de dades integral per gestionar empleats, clients i l'activitat dels serveis.
+
+[↑ Tornar a l'índex](#index)
 
 ---
 
@@ -29,6 +51,8 @@ Un fals sostre col·locat a 3 m d'alçada, deixant 70 cm d'espai ocult a sobre. 
 
 - **Gestió interna als racks:** Dins de cada rack, els cables estaran organitzats amb guies i brides perquè no quedin penjant ni desordenats. A més, tots els cables tindran una etiqueta amb un codi als dos extrems, de manera que qualsevol tècnic podrà identificar ràpidament a on va cada cable sense haver de seguir-lo d'un extrem a l'altre.
 
+[↑ Tornar a l'índex](#index)
+
 ---
 
 ## 1.3 Sistemes de climatització
@@ -44,6 +68,8 @@ Per garantir que la climatització no falli mai, hi haurà una segona unitat de 
 **Organització passadís fred / calent**
 
 Els racks s'organitzaran alineats amb la part frontal orientada cap al passadís fred, per on arribarà l'aire fred que puja des del terra tècnic, i la part posterior orientada cap al passadís calent, on s'acumularà l'aire calent expulsat pels servidors. Als laterals hi haurà panells físics que separaran els dos passadissos per evitar que l'aire fred i l'aire calent es barregin, permetent que el sistema treballi de forma molt més eficient i estalviant fins a un 30 % d'energia respecte a una distribució desordenada.
+
+[↑ Tornar a l'índex](#index)
 
 ---
 
@@ -127,6 +153,8 @@ Emmagatzematge centralitzat en RAID 5 (12 TB útils de 16 TB bruts). Guarda els 
 
 ![Diagrama de racks](../img/cpd/cpd)
 
+[↑ Tornar a l'índex](#index)
+
 ---
 
 ## 1.5 Infraestructura elèctrica i SAI
@@ -155,6 +183,8 @@ Els racks aniran amb 2 PDUs (Power Distribution Unit) connectades a les línies 
 Donada la càrrega total de 2.450 W, es despleguen dos SAI en paral·lel: 2× APC Smart-UPS 3000VA LCD RM 2U (rack-mount), un per a cada línia elèctrica, distribuint la càrrega i garantint redundància elèctrica completa.
 
 Amb les bateries internes que vénen de sèrie, s'obtenen aproximadament 20-25 minuts d'autonomia a plena càrrega, suficients per activar un generador extern o fer una parada controlada. En cas de voler augmentar l'autonomia fins a 60-90 minuts, es pot afegir una bateria externa APC SUA48RMXLBP.
+
+[↑ Tornar a l'índex](#index)
 
 ---
 
@@ -204,6 +234,8 @@ Les càmeres han de complir amb els següents requisits:
 | Temperatura | Manteniment entre 18 i 27 °C per al personal que treballa a la sala. |
 | Formació | Formació anual per a tot el personal de sistemes sobre riscos i protocols d'emergència. |
 
+[↑ Tornar a l'índex](#index)
+
 ---
 
 ## 1.7 Seguretat lògica
@@ -243,6 +275,8 @@ L'emmagatzematge de totes les còpies de seguretat recau íntegrament sobre el N
 | S1 – S6 | RAID 1 | Redundància per a tots els serveis de producció. Recuperació immediata sense pèrdua de dades. |
 | NAS | RAID 5 (4 discs) | Tolerància a fallada d'1 disc. Capacitat neta: 12 TB útils de 16 TB bruts. |
 
+[↑ Tornar a l'índex](#index)
+
 ---
 
 ## 1.8 Distribució de serveis
@@ -257,8 +291,9 @@ L'emmagatzematge de totes les còpies de seguretat recau íntegrament sobre el N
 | Centralització de logs | S6 | Syslog-ng. Recull logs de tots els servidors. |
 | Emmagatzematge i backups | NAS | Synology RS1221+ en RAID 5. Backups de tots els servidors i gravacions de càmeres. |
 
----
+[↑ Tornar a l'índex](#index)
 
+---
 
 ## Plànols sala CPD
 
@@ -271,3 +306,5 @@ L'emmagatzematge de totes les còpies de seguretat recau íntegrament sobre el N
 ![Plànol perfil](../img/cpd/perfil)
 
 
+
+[↑ Tornar a l'índex](#index)
