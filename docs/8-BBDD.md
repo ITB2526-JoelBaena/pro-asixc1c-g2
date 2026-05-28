@@ -201,23 +201,8 @@ El script sap gestionar errors (usuari ja existent, número d'usuaris invàlid, 
 
 El fitxer `usuaris_creats.sql` generat automàticament conté les sentències SQL per poder revisar i executar posteriorment:
 
-```sql
--- Usuari: user_vendes@localhost | Rol: vendes
-CREATE USER 'user_vendes'@'localhost' IDENTIFIED BY '***';
-GRANT 'vendes' TO 'user_vendes'@'localhost';
-SET DEFAULT ROLE 'vendes' TO 'user_vendes'@'localhost';
-GRANT FILE ON *.* TO 'user_vendes'@'localhost';
-FLUSH PRIVILEGES;
+![Usuaris_creats](../img/bbdd/usuaris_creats.png)
 
--- Usuari: user_administracio@localhost | Rol: administracio
-CREATE USER 'user_administracio'@'localhost' IDENTIFIED BY '***';
-GRANT 'administracio' TO 'user_administracio'@'localhost';
-SET DEFAULT ROLE 'administracio' TO 'user_administracio'@'localhost';
-GRANT FILE ON *.* TO 'user_administracio'@'localhost';
-FLUSH PRIVILEGES;
-```
-
----
 
 ## 8.7 Triggers i comprovacions
 
