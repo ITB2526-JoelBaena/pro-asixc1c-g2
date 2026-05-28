@@ -23,7 +23,7 @@
 
 ## 1.1 Descripció de l'empresa
 
-InnovateTech és una empresa petita (entre 10 i 50 empleats) dedicada a la provisió de serveis tecnològics, amb una activitat creixent de vendes en línia i una demanda de suport tècnic als seus clients. L'empresa disposa de 3 departaments: Vendes, Suport Tècnic i Administració. Per gestionar tot això, necessitem una base tecnològica que integri la gestió del personal amb serveis multimèdia avançats: distribució d'àudio i vídeo en streaming i un sistema de base de dades integral per gestionar empleats, clients i l'activitat dels serveis.
+InnovateTech és una empresa petita (entre 10 i 50 empleats) dedicada a la provisió de serveis tecnològics, amb una activitat creixent de vendes en línia i una demanda de suport tècnic als seus clients. L'empresa disposa de 5 departaments: Vendes, Suport Tècnic, Administració, Logística i Direcció. Per gestionar tot això, necessitem una base tecnològica que integri la gestió del personal amb serveis multimèdia avançats: distribució d'àudio i vídeo en streaming i un sistema de base de dades integral per gestionar empleats, clients i l'activitat dels serveis.
 
 [↑ Tornar a l'índex](#index)
 
